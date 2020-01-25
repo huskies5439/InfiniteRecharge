@@ -36,7 +36,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-    basePilotable.setDefaultCommand(new RunCommand(()-> basePilotable.conduire(controller.getY(GenericHID.Hand.kLeft), controller.getX(GenericHID.Hand.kRight)),basePilotable));
+    basePilotable.setDefaultCommand(new RunCommand(()-> basePilotable.conduire(-0.4*controller.getY(GenericHID.Hand.kLeft), -0.75*controller.getX(GenericHID.Hand.kRight), Math.abs(controller.getY())<0.2),basePilotable));
   }                               
 
 

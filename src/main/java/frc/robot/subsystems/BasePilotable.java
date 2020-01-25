@@ -39,7 +39,7 @@ public class BasePilotable extends SubsystemBase {
   public void periodic() {
     
   }
-  public void conduire(double vx, double vz){
-    drive.curvatureDrive(-0.4*vx, -0.75*vz, false);
+  public void conduire(double vx, double vz, boolean turn){
+    drive.curvatureDrive(vx, vz, turn);
   }
 }
