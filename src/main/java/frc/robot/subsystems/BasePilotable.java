@@ -40,6 +40,6 @@ public class BasePilotable extends SubsystemBase {
     
   }
   public void conduire(double vx, double vz, boolean turn){
-    drive.curvatureDrive(vx, vz, turn);
+    drive.curvatureDrive(-vx, -vz, turn);
   }
 }
