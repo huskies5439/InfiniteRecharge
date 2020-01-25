@@ -8,10 +8,12 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.conduireTeleop;
+import frc.robot.commands.ConduireTeleop;
 import frc.robot.subsystems.BasePilotable;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -21,11 +23,12 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final BasePilotable m_exampleSubsystem = new BasePilotable();
+  private final BasePilotable basePilotable = new BasePilotable();
 
-  private final ConduireTeleop m_autoCommand = new conduireTeleop(m_exampleSubsystem);
+  private final ConduireTeleop conduireTeleop = new ConduireTeleop(basePilotable);
 
-
+  Joystick joystick = new Joystick(0);
+  XboxController controller = new XboxController(0);
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -33,7 +36,9 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-  }
+    basePilotable.setDefaultCommand(new RunCommand(()-> basePilotable.conduire(controller.getY(GenericHID.Hand.kLeft), controller.getX(GenericHID.Hand.kRight)),basePilotable));
+  }                               
+
 
   /**
    * Use this method to define your button->command mappings.  Buttons can be created by
@@ -41,7 +46,8 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {
+   private void configureButtonBindings() {
+   
   }
 
 
@@ -50,8 +56,8 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
+  //public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
-  }
+    //return m_autoCommand;
+  //}
 }

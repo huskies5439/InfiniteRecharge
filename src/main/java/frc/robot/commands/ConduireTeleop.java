@@ -7,6 +7,8 @@
 
 package frc.robot.commands;
 
+import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.BasePilotable;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -14,8 +16,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  * An example command that uses an example subsystem.
  */
 public class ConduireTeleop extends CommandBase {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final ExampleSubsystem m_subsystem;
+  @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
+  private final BasePilotable m_subsystem;
 
   /**
    * Creates a new ExampleCommand.
@@ -23,9 +25,12 @@ public class ConduireTeleop extends CommandBase {
    * @param subsystem The subsystem used by this command.
    */
   public ConduireTeleop(BasePilotable subsystem) {
+
     m_subsystem = subsystem;
+
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
+
   }
 
   // Called when the command is initially scheduled.
@@ -36,6 +41,7 @@ public class ConduireTeleop extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
   }
 
   // Called once the command ends or is interrupted.

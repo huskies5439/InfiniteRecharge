@@ -16,10 +16,10 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class BasePilotable extends SubsystemBase {
-  private CANSparkMax neog1 = new CANSparkMax(1, MotorType.kBrushless);
-  private CANSparkMax neog2 = new CANSparkMax(1, MotorType.kBrushless);
-  private CANSparkMax neod1 = new CANSparkMax(1, MotorType.kBrushless);
-  private CANSparkMax neod2 = new CANSparkMax(1, MotorType.kBrushless);
+  private CANSparkMax neog1 = new CANSparkMax(22, MotorType.kBrushless);
+  private CANSparkMax neog2 = new CANSparkMax(23, MotorType.kBrushless);
+  private CANSparkMax neod1 = new CANSparkMax(24, MotorType.kBrushless);
+  private CANSparkMax neod2 = new CANSparkMax(25, MotorType.kBrushless);
   
   private SpeedControllerGroup neog = new SpeedControllerGroup(neog1, neog2);
   private SpeedControllerGroup neod = new SpeedControllerGroup(neod1, neod2);
@@ -30,12 +30,16 @@ public class BasePilotable extends SubsystemBase {
   /**
    * Creates a new ExampleSubsystem.
    */
+
   public BasePilotable() {
 
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    
+  }
+  public void conduire(double vx, double vz){
+    drive.curvatureDrive(-0.4*vx, -0.75*vz, false);
   }
 }
