@@ -7,9 +7,15 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Gobeur extends SubsystemBase {
+  private DoubleSolenoid tiroir = new DoubleSolenoid(0, 1);
+  private CANSparkMax rouleau = new CANSparkMax(0, MotorType.kBrushless);
   /**
    * Creates a new Gobeur.
    */
@@ -20,5 +26,21 @@ public class Gobeur extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+  public void moteurStop(){
+    rouleau.set(0.0);
+  }
+  public void moteurGobe(){
+    rouleau.set(1.0);
+  }
+  public void moteurPanic(){
+    rouleau.set(1);
+    rouleau.set(-1);
+  }
+  public void tiroirIn(){
+    tiroir.set(Value.kReverse);
+  }
+  public void tiroirOut(){
+    tiroir.set(Value.kForward);
   }
 }
