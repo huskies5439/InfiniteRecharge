@@ -10,10 +10,13 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ConduireTeleop;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.subsystems.BasePilotable;
+import frc.robot.subsystems.Transmission;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -24,9 +27,9 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final BasePilotable basePilotable = new BasePilotable();
-
-  private final ConduireTeleop conduireTeleop = new ConduireTeleop(basePilotable);
-
+  private final Transmission transmission =new Transmission();
+  
+  
   Joystick joystick = new Joystick(0);
   XboxController controller = new XboxController(0);
 
@@ -36,7 +39,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-    basePilotable.setDefaultCommand(new RunCommand(()-> basePilotable.conduire(0.4*controller.getY(GenericHID.Hand.kLeft), 0.4*controller.getX(GenericHID.Hand.kRight), Math.abs(controller.getY())<0.2),basePilotable));
+    basePilotable.setDefaultCommand(new RunCommand(()-> basePilotable.conduire(1*controller.getY(GenericHID.Hand.kLeft), 0.65*controller.getX(GenericHID.Hand.kRight), Math.abs(controller.getY())<0.2),basePilotable));
   }                               
 
 
@@ -47,7 +50,8 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
    private void configureButtonBindings() {
-   
+    new JoystickButton(controller, Button.kA.value).whenPressed(new InstantCommand(transmission::hauteVitesse,transmission));
+    new JoystickButton(controller, Button.kY.value).whenPressed(new InstantCommand(transmission::basseVitesse,transmission));
   }
 
 
