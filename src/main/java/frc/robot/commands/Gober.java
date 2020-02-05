@@ -9,22 +9,19 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class ChangerVitesse extends CommandBase {
-  Transmission transmission;
-  BasePilotable basePilotable;
+public class Gober extends CommandBase {
+  
   /**
-   * Creates a new ChangerVitesse.
+   * Creates a new gobe.
    */
-  public ChangerVitesse(BasePilotable basePilotable,Transmission transmission) {
+  public Gober() {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.transmission=transmission;
-    this.basePilotable=basePilotable;
-    addRequirements(transmission);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
