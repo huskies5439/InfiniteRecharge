@@ -10,8 +10,11 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+
+
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -24,26 +27,30 @@ public class BasePilotable extends SubsystemBase {
   private CANSparkMax neog2 = new CANSparkMax(31, MotorType.kBrushless);
   private CANSparkMax neod1 = new CANSparkMax(32, MotorType.kBrushless);
   private CANSparkMax neod2 = new CANSparkMax(33, MotorType.kBrushless);
-  
+
   private SpeedControllerGroup neog = new SpeedControllerGroup(neog1, neog2);
   private SpeedControllerGroup neod = new SpeedControllerGroup(neod1, neod2);
-  
+
   private DifferentialDrive drive = new DifferentialDrive(neog, neod);
 
   private Encoder encodeurg = new Encoder(1, 2);
   private Encoder encodeurd = new Encoder(1, 2);
-  private DoubleSolenoid vitesse =new DoubleSolenoid(0, 1);
-  
-  enum State{LOW,HIGH,AUTO}
-  State state =State.AUTO;
-  
+
+  private DoubleSolenoid vitesse = new DoubleSolenoid(0, 1);
+
+  private enum State {
+    LOW, HIGH, AUTO
+  }
+  private State state = State.AUTO;
+
   /**
    * Creates a new ExampleSubsystem.
    */
 
   public BasePilotable() {
     ramp(0.25);
-
+    basseVitesse();
+    
   }
 
   @Override
@@ -51,51 +58,58 @@ public class BasePilotable extends SubsystemBase {
     SmartDashboard.putNumber("EncoderG", positionG());
     SmartDashboard.putNumber("EncoderD", positionD());
 
-    if (velocity() > 1 & state== state.LOW){   
+    if (velocity() > 1 & state == State.LOW) {
       hauteVitesse();
-      state =state.HIGH;
-    }
-    else if (velocity()<0.8 & state== state.HIGH){
+      state = State.HIGH;
+    } 
+    else if (velocity() < 0.8 & state == State.HIGH) {
       basseVitesse();
-      state =state.LOW;
+      state = State.LOW;
     }
-    else{
+    else if (state == State.AUTO) {
       basseVitesse();
-      state= state.AUTO;
+      if (!RobotState.isAutonomous()) {
+        state = State.LOW;
+      }
     }
-
-    
   }
-  public void conduire(double vx, double vz, boolean turn){
+
+  public void conduire(double vx, double vz, boolean turn) {
     drive.curvatureDrive(vx, -vz, turn);
   }
-  public void ramp(double ramp){
-    neog1.setOpenLoopRampRate(ramp); 
-    neog2.setOpenLoopRampRate(ramp);   
-    neod1.setOpenLoopRampRate(ramp); 
-    neod2.setOpenLoopRampRate(ramp);                       
+
+  public void ramp(double ramp) {
+    neog1.setOpenLoopRampRate(ramp);
+    neog2.setOpenLoopRampRate(ramp);
+    neod1.setOpenLoopRampRate(ramp);
+    neod2.setOpenLoopRampRate(ramp);
   }
-  public double velocityD(){
+
+  public double velocityD() {
     return encodeurd.getRate();
   }
-  public double velocityG(){
+
+  public double velocityG() {
     return encodeurg.getRate();
   }
-  public double velocity(){
-    return velocityD()+velocityG()/2;
+
+  public double velocity() {
+    return (velocityD() + velocityG()) / 2;
   }
-  public double positionD(){
+
+  public double positionD() {
     return encodeurd.getDistance();
   }
-  public double positionG(){
+
+  public double positionG() {
     return encodeurg.getDistance();
-  }//encoder= 256 pulse/tour
-  
-  public void hauteVitesse(){
+  }// encoder= 256 pulse/tour
+
+  public void hauteVitesse() {
     vitesse.set(Value.kForward);
   }
-  public void basseVitesse(){
+
+  public void basseVitesse() {
     vitesse.set(Value.kReverse);
   }
 }
-
