@@ -7,6 +7,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Tourelle;
@@ -18,10 +19,10 @@ public class TourelleAuto extends CommandBase {
   /**
    * Creates a new TourelleAuto.
    */
-  public TourelleAuto(Tourelle tourelle,Limelight limelight) {
+  public TourelleAuto(Tourelle tourelle, Limelight limelight) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.tourelle=tourelle;
-    this.limelight=limelight;
+    this.tourelle = tourelle;
+    this.limelight = limelight;
     addRequirements(limelight);
     addRequirements(tourelle);
   }
@@ -39,7 +40,14 @@ public class TourelleAuto extends CommandBase {
     if(tourelle.getSoftLimit()){
       if(limelight.getTv()){
         tourelle.pidController(limelight.getTx());
+        SmartDashboard.putString("Avertissement Cible", "YA UNE CIBLE !!!");  
       }
+      else{
+        SmartDashboard.putString("Avertissement Cible", "PAS DE CIBLE !!!");     
+       }
+    }
+    else{
+      tourelle.stop();
     }
   }
 
