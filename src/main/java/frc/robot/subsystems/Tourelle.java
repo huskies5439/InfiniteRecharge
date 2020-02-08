@@ -15,12 +15,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Tourelle extends SubsystemBase {
-  NetworkTableInstance networkTableInstance = NetworkTableInstance.getDefault();
-  NetworkTable limelight = networkTableInstance.getTable("limelight-huskies");
-  NetworkTableEntry tv = limelight.getEntry("tv");
-  NetworkTableEntry tx = limelight.getEntry("tx");
-  WPI_TalonSRX tourelle = new WPI_TalonSRX(1);
-  NetworkTableEntry ty = limelight.getEntry("ty"); 
+  
   /** 
    * Creates a new Tourelle.
    */
