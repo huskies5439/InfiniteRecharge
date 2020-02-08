@@ -1,3 +1,4 @@
+
 /*----------------------------------------------------------------------------*/
 /* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
@@ -11,7 +12,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Encoder;
-
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
@@ -19,43 +20,36 @@ import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 
 
 public class Lanceur extends PIDSubsystem {
-  private final CANSparkMax m_shooterMotor = new CANSparkMax(22,MotorType.kBrushless);
-  private final CANSparkMax m_feederMotor = new CANSparkMax(23,MotorType.kBrushless);
-  private final Encoder m_shooterEncoder =
-      new Encoder(1,2);
-  private final SimpleMotorFeedforward m_shooterFeedforward =
-      new SimpleMotorFeedforward(ShooterConstants.kSVolts,
-                                 ShooterConstants.kVVoltSecondsPerRotation);
+  private final CANSparkMax shooterMotor1 = new CANSparkMax(22,MotorType.kBrushless);
+  private final CANSparkMax shooterMotor2 = new CANSparkMax(23,MotorType.kBrushless);
+  private final SpeedControllerGroup moteurslanceur  = new SpeedControllerGroup(shooterMotor1,shooterMotor2);
+
+  private final Encoder encodeurlanceur = new Encoder(1,2);
+  private final SimpleMotorFeedforward motorfeedforward = new SimpleMotorFeedforward(0,0);
 
   /**
    * The shooter subsystem for the robot.
    */
   public Lanceur() {
-    super(new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD));
-    getController().setTolerance(ShooterConstants.kShooterToleranceRPS);
-    m_shooterEncoder.setDistancePerPulse(ShooterConstants.kEncoderDistancePerPulse);
-    setSetpoint(ShooterConstants.kShooterTargetRPS);
+    super(new PIDController(0,0,0));
+    getController().setTolerance(0);
+    encodeurlanceur.setDistancePerPulse(0);
+    setSetpoint(0);
   }
 
   @Override
   public void useOutput(double output, double setpoint) {
-    m_shooterMotor.setVoltage(output + m_shooterFeedforward.calculate(setpoint));
+    moteurslanceur.setVoltage(output + motorfeedforward.calculate(setpoint));
   }
 
   @Override
   public double getMeasurement() {
-    return m_shooterEncoder.getRate();
+    return encodeurlanceur.getRate();
   }
 
   public boolean atSetpoint() {
     return m_controller.atSetpoint();
   }
 
-  public void runFeeder() {
-    m_feederMotor.set(1);
-  }
-
-  public void stopFeeder() {
-    m_feederMotor.set(0);
-  }
+  
 }
