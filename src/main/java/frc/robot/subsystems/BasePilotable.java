@@ -15,7 +15,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotState;
-import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -48,21 +47,24 @@ public class BasePilotable extends SubsystemBase {
    */
 
   public BasePilotable() {
-    ramp(0.25);
+    setRamp(0.25);
     basseVitesse();
     
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("EncoderG", positionG());
-    SmartDashboard.putNumber("EncoderD", positionD());
+    SmartDashboard.putNumber("PositionG", getPositionG());
+    SmartDashboard.putNumber("PositionD", getPositionD());
+    SmartDashboard.putNumber("VitesseG", getVitesseG());
+    SmartDashboard.putNumber("VitesseD", getVitesseD());
+    SmartDashboard.putNumber("Vitesse Moyenne", getVitesse());
 
-    if (velocity() > 1 & state == State.LOW) {
+    if (getVitesse() > 1 & state == State.LOW) {
       hauteVitesse();
       state = State.HIGH;
     } 
-    else if (velocity() < 0.8 & state == State.HIGH) {
+    else if (getVitesse() < 0.8 & state == State.HIGH) {
       basseVitesse();
       state = State.LOW;
     }
@@ -74,34 +76,34 @@ public class BasePilotable extends SubsystemBase {
     }
   }
 
-  public void conduire(double vx, double vz, boolean turn) {
-    drive.curvatureDrive(vx, -vz, turn);
+  public void conduire(double vx, double vz) {
+    drive.curvatureDrive(vx, -vz, Math.abs(vx)<0.2);
   }
 
-  public void ramp(double ramp) {
+  public void setRamp(double ramp) {
     neog1.setOpenLoopRampRate(ramp);
     neog2.setOpenLoopRampRate(ramp);
     neod1.setOpenLoopRampRate(ramp);
     neod2.setOpenLoopRampRate(ramp);
   }
 
-  public double velocityD() {
+  public double getVitesseD() {
     return encodeurd.getRate();
   }
 
-  public double velocityG() {
+  public double getVitesseG() {
     return encodeurg.getRate();
   }
 
-  public double velocity() {
-    return (velocityD() + velocityG()) / 2;
+  public double getVitesse() {
+    return (getVitesseD() + getVitesseG()) / 2;
   }
 
-  public double positionD() {
+  public double getPositionD() {
     return encodeurd.getDistance();
   }
 
-  public double positionG() {
+  public double getPositionG() {
     return encodeurg.getDistance();
   }// encoder= 256 pulse/tour
 

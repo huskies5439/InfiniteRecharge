@@ -41,10 +41,10 @@ public class Tourelle extends SubsystemBase {
   }
 
   public void pidController(double mesure) {
-    vitesse(pid.calculate(mesure, 0));
+    setVitesse(pid.calculate(mesure, 0));
   }
 
-  public void vitesse(double v) {
+  public void setVitesse(double v) {
     moteurTourelle.set(ControlMode.PercentOutput, v);
   }
 
@@ -64,6 +64,7 @@ public class Tourelle extends SubsystemBase {
   public void periodic() {
     softLimit = Math.abs(getPosition()) < 45 || Math.signum(getPosition()) != Math.signum(getVitesse());
     SmartDashboard.putBoolean("Tourelle ok ?", softLimit);
-    // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Angle", getPosition());
+    SmartDashboard.putNumber("Vitesse", getVitesse());
   }
 }

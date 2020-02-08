@@ -20,12 +20,12 @@ import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 
 
 public class Lanceur extends PIDSubsystem {
-  private final CANSparkMax shooterMotor1 = new CANSparkMax(22,MotorType.kBrushless);
-  private final CANSparkMax shooterMotor2 = new CANSparkMax(23,MotorType.kBrushless);
-  private final SpeedControllerGroup moteurslanceur  = new SpeedControllerGroup(shooterMotor1,shooterMotor2);
+  private final CANSparkMax moteurLanceurDroit = new CANSparkMax(22,MotorType.kBrushless);
+  private final CANSparkMax moteurLanceurGauche = new CANSparkMax(23,MotorType.kBrushless);
+  private final SpeedControllerGroup moteurLanceur  = new SpeedControllerGroup(moteurLanceurDroit,moteurLanceurGauche);
 
-  private final Encoder encodeurlanceur = new Encoder(1,2);
-  private final SimpleMotorFeedforward motorfeedforward = new SimpleMotorFeedforward(0,0);
+  private final Encoder encodeurLanceur = new Encoder(1,2);
+  private final SimpleMotorFeedforward lanceurFF = new SimpleMotorFeedforward(0,0);
 
   /**
    * The shooter subsystem for the robot.
@@ -33,21 +33,21 @@ public class Lanceur extends PIDSubsystem {
   public Lanceur() {
     super(new PIDController(0,0,0));
     getController().setTolerance(0);
-    encodeurlanceur.setDistancePerPulse(0);
+    encodeurLanceur.setDistancePerPulse(0);
     setSetpoint(0);
   }
 
   @Override
   public void useOutput(double output, double setpoint) {
-    moteurslanceur.setVoltage(output + motorfeedforward.calculate(setpoint));
+    moteurLanceur.setVoltage(output + lanceurFF.calculate(setpoint));
   }
 
   @Override
   public double getMeasurement() {
-    return encodeurlanceur.getRate();
+    return encodeurLanceur.getRate();
   }
 
-  public boolean atSetpoint() {
+  public boolean estBonneVitesse() {
     return m_controller.atSetpoint();
   }
 

@@ -34,8 +34,7 @@ public class Gobeur extends SubsystemBase {
     rouleau.set(1.0);
   }
   public void moteurPanic(){
-    rouleau.set(1);
-    rouleau.set(-1);
+    rouleau.set(-1.0);
   }
   public void tiroirIn(){
     tiroir.set(Value.kReverse);

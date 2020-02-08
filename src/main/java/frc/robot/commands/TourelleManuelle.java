@@ -33,7 +33,7 @@ public class TourelleManuelle extends CommandBase {
   @Override
   public void execute() {
     if(tourelle.getSoftLimit()){
-      tourelle.vitesse(vInput);
+      tourelle.setVitesse(vInput);
     }
     else{
       tourelle.stop();

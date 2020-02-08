@@ -29,8 +29,9 @@ public class RobotContainer {
   
   
   
-  Joystick joystick = new Joystick(0);
-  XboxController controller = new XboxController(0);
+  
+  XboxController pilote = new XboxController(0);
+  XboxController copilote = new XboxController(1);
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -38,7 +39,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-    basePilotable.setDefaultCommand(new RunCommand(()-> basePilotable.conduire(1*controller.getY(GenericHID.Hand.kLeft), 0.65*controller.getX(GenericHID.Hand.kRight), Math.abs(controller.getY())<0.2),basePilotable));
+    basePilotable.setDefaultCommand(new RunCommand(()-> basePilotable.conduire(1*pilote.getY(GenericHID.Hand.kLeft), 0.65*pilote.getX(GenericHID.Hand.kRight)),basePilotable));
   }                               
 
 
