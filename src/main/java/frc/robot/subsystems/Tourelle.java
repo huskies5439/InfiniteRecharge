@@ -8,7 +8,6 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.Encoder;
@@ -18,7 +17,7 @@ import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Tourelle extends SubsystemBase {
-  private TalonSRX moteurTourelle = new TalonSRX(13);
+  private WPI_TalonSRX moteurTourelle = new WPI_TalonSRX(13);
   private Encoder encoderTourelle = new Encoder(1, 2);
   private ProfiledPIDController pid = new ProfiledPIDController(0, 0, 0,
       new TrapezoidProfile.Constraints(/* max speed/sec */0, /* max acceleration/sec */0));
