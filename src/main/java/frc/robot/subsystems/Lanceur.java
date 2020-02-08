@@ -1,4 +1,5 @@
-/*----------------------------------------------------------------------------*/
+
+g/*----------------------------------------------------------------------------*/
 /* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
@@ -20,21 +21,20 @@ import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 
 public class Lanceur extends PIDSubsystem {
   private final CANSparkMax m_shooterMotor = new CANSparkMax(22,MotorType.kBrushless);
-  private final CANSparkMax m_feederMotor = new CANSparkMax(23,MotorType.kBrushless);
+ 
   private final Encoder m_shooterEncoder =
       new Encoder(1,2);
   private final SimpleMotorFeedforward m_shooterFeedforward =
-      new SimpleMotorFeedforward(ShooterConstants.kSVolts,
-                                 ShooterConstants.kVVoltSecondsPerRotation);
+      new SimpleMotorFeedforward(0,0);
 
   /**
    * The shooter subsystem for the robot.
    */
   public Lanceur() {
-    super(new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD));
-    getController().setTolerance(ShooterConstants.kShooterToleranceRPS);
-    m_shooterEncoder.setDistancePerPulse(ShooterConstants.kEncoderDistancePerPulse);
-    setSetpoint(ShooterConstants.kShooterTargetRPS);
+    super(new PIDController(0,0,0));
+    getController().setTolerance(0);
+    m_shooterEncoder.setDistancePerPulse(0);
+    setSetpoint(0);
   }
 
   @Override
@@ -51,11 +51,5 @@ public class Lanceur extends PIDSubsystem {
     return m_controller.atSetpoint();
   }
 
-  public void runFeeder() {
-    m_feederMotor.set(1);
-  }
-
-  public void stopFeeder() {
-    m_feederMotor.set(0);
-  }
+  
 }

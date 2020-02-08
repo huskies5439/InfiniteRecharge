@@ -7,21 +7,47 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Limelight extends SubsystemBase {
-  NetworkTableInstance networkTableInstance = NetworkTableInstance.getDefault();
-  NetworkTable limelight = networkTableInstance.getTable("limelight-huskies");
-  NetworkTableEntry tv = limelight.getEntry("tv");
-  NetworkTableEntry tx = limelight.getEntry("tx");
-  WPI_TalonSRX tourelle = new WPI_TalonSRX(1);
-  NetworkTableEntry ty = limelight.getEntry("ty"); 
+private  NetworkTableInstance networkTableInstance = NetworkTableInstance.getDefault();
+private  NetworkTable limelight = networkTableInstance.getTable("limelight-huskies");
+private  NetworkTableEntry tv = limelight.getEntry("tv");
+private  NetworkTableEntry tx = limelight.getEntry("tx");
+private NetworkTableEntry ta = limelight.getEntry("ta");
+private NetworkTableEntry ty = limelight.getEntry("ty"); 
+private NetworkTableEntry ledMode = limelight.getEntry("ty");
   /**
    * Creates a new Limelight.
    */
   public Limelight() {
 
+
   }
+
+
+public double GetTa() {
+ return ta.getDouble(0);
+}
+public double GetTv() {
+  return tv.getDouble(0);
+ }
+ public double GetTx() {
+  return tx.getDouble(0);
+ }
+ public double getTy() {
+  return ty.getDouble(0);
+ }
+public void SetLed(int ledpower){
+ledMode.setNumber(ledpower);
+}
+
 
   @Override
   public void periodic() {
