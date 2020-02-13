@@ -8,9 +8,14 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Button;
+import frc.robot.commands.Gober;
 import frc.robot.subsystems.BasePilotable;
+import frc.robot.subsystems.Gobeur;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -24,17 +29,18 @@ public class RobotContainer {
   
   
   
-  
   XboxController pilote = new XboxController(0);
-  XboxController copilote = new XboxController(1);
+  //XboxController copilote = new XboxController(1);
+  
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    // Configure the button bindings
     configureButtonBindings();
     basePilotable.setDefaultCommand(new RunCommand(()-> basePilotable.conduire(1*pilote.getY(GenericHID.Hand.kLeft), 0.65*pilote.getX(GenericHID.Hand.kRight)),basePilotable));
+
+    
   }                               
 
 
@@ -44,8 +50,10 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-   private void configureButtonBindings() {
+   private void configureButtonBindings(){
+   //new JoystickButton(pilote, Button.kA.value).toggleWhenActive(new Gober(gobeur).andThen(new Wa));
    
+ 
   }
 
 

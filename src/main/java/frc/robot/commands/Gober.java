@@ -39,7 +39,7 @@ public class Gober extends CommandBase {
   public void end(boolean interrupted) {
     gobeur.moteurStop();
     //il faut ajouter un délai entre ces deux actions
-    gobeur.tiroirIn();
+    
   }
 
   // Returns true when the command should end.

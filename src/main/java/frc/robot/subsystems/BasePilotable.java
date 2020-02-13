@@ -22,39 +22,39 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class BasePilotable extends SubsystemBase {
-  private CANSparkMax neog1 = new CANSparkMax(20, MotorType.kBrushless);
-  private CANSparkMax neog2 = new CANSparkMax(31, MotorType.kBrushless);
-  private CANSparkMax neod1 = new CANSparkMax(32, MotorType.kBrushless);
-  private CANSparkMax neod2 = new CANSparkMax(33, MotorType.kBrushless);
+  private CANSparkMax neog1 = new CANSparkMax(33, MotorType.kBrushless);
+  private CANSparkMax neog2 = new CANSparkMax(32, MotorType.kBrushless);
+  private CANSparkMax neod1 = new CANSparkMax(30, MotorType.kBrushless);
+  private CANSparkMax neod2 = new CANSparkMax(31, MotorType.kBrushless);
 
   private SpeedControllerGroup neog = new SpeedControllerGroup(neog1, neog2);
   private SpeedControllerGroup neod = new SpeedControllerGroup(neod1, neod2);
 
   private DifferentialDrive drive = new DifferentialDrive(neog, neod);
 
-  private Encoder encodeurg = new Encoder(1, 2);
-  private Encoder encodeurd = new Encoder(1, 2);
+ // private Encoder encodeurg = new Encoder(1, 2);
+  //private Encoder encodeurd = new Encoder(1, 2);
 
-  private DoubleSolenoid vitesse = new DoubleSolenoid(0, 1);
-
+ // private DoubleSolenoid vitesse = new DoubleSolenoid(0, 1);
+/*
   private enum State {
     LOW, HIGH, AUTO
   }
   private State state = State.AUTO;
-
+*/
   /**
    * Creates a new ExampleSubsystem.
    */
 
   public BasePilotable() {
     setRamp(0.25);
-    basseVitesse();
+    //basseVitesse();
     
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("PositionG", getPositionG());
+   /* SmartDashboard.putNumber("PositionG", getPositionG());
     SmartDashboard.putNumber("PositionD", getPositionD());
     SmartDashboard.putNumber("VitesseG", getVitesseG());
     SmartDashboard.putNumber("VitesseD", getVitesseD());
@@ -73,7 +73,7 @@ public class BasePilotable extends SubsystemBase {
       if (!RobotState.isAutonomous()) {
         state = State.LOW;
       }
-    }
+    }*/
   }
 
   public void conduire(double vx, double vz) {
@@ -86,7 +86,7 @@ public class BasePilotable extends SubsystemBase {
     neod1.setOpenLoopRampRate(ramp);
     neod2.setOpenLoopRampRate(ramp);
   }
-
+/*
   public double getVitesseD() {
     return encodeurd.getRate();
   }
@@ -113,5 +113,5 @@ public class BasePilotable extends SubsystemBase {
 
   public void basseVitesse() {
     vitesse.set(Value.kReverse);
-  }
+  }*/
 }
