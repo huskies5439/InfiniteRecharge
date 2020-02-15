@@ -10,12 +10,16 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.commands.Gober;
 import frc.robot.commands.Lancer;
+import frc.robot.commands.TourelleAuto;
+import frc.robot.commands.TourelleManuelle;
 import frc.robot.subsystems.BasePilotable;
 import frc.robot.subsystems.Gobeur;
 import frc.robot.subsystems.Lanceur;
+import frc.robot.subsystems.Tourelle;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -32,11 +36,12 @@ public class RobotContainer {
   private final BasePilotable basePilotable = new BasePilotable();
   private final Lanceur lanceur = new Lanceur();
   private final Gobeur gobeur = new Gobeur();
+  //private final Tourelle tourelle = new Tourelle();
   
   
   
   XboxController pilote = new XboxController(0);
-  //XboxController copilote = new XboxController(1);
+  XboxController copilote = new XboxController(1);
   
 
   /**
@@ -45,7 +50,7 @@ public class RobotContainer {
   public RobotContainer() {
     configureButtonBindings();
     basePilotable.setDefaultCommand(new RunCommand(()-> basePilotable.conduire(1*pilote.getY(GenericHID.Hand.kLeft), 0.65*pilote.getX(GenericHID.Hand.kRight)),basePilotable));
-
+    //tourelle.setDefaultCommand(new TourelleManuelle((copilote.getTriggerAxis(Hand.kLeft)-copilote.getTriggerAxis(Hand.kRight))*1, tourelle));
     
   }                               
 
@@ -58,10 +63,13 @@ public class RobotContainer {
    */
    private void configureButtonBindings(){
    
-   new JoystickButton(pilote, Button.kA.value).toggleWhenActive(new Gober(gobeur).andThen(new WaitCommand(2.0)).andThen(new InstantCommand(gobeur::moteurStop, gobeur)));
+   new JoystickButton(pilote, Button.kA.value).toggleWhenPressed(new Gober(gobeur).andThen(new WaitCommand(2.0)).andThen(new InstantCommand(gobeur::tiroirIn, gobeur)));
    
-   new JoystickButton(pilote, Button.kY.value).toggleWhenActive(new Lancer(lanceur));
- 
+   new JoystickButton(pilote, Button.kY.value).toggleWhenPressed(new Lancer(lanceur));
+
+   new JoystickButton(pilote, Button.kB.value).toggleWhenPressed(new InstantCommand(gobeur::tiroirOut, gobeur));
+   
+   //new JoystickButton(copilote, Button.kA.value).whenHeld(new TourelleAuto(tourelle));
   }
 
 

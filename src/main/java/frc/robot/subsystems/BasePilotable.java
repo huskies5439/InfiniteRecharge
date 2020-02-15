@@ -23,10 +23,10 @@ import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class BasePilotable extends SubsystemBase {
-  private CANSparkMax neog1 = new CANSparkMax(33, MotorType.kBrushless);
-  private CANSparkMax neog2 = new CANSparkMax(32, MotorType.kBrushless);
-  private CANSparkMax neod1 = new CANSparkMax(30, MotorType.kBrushless);
-  private CANSparkMax neod2 = new CANSparkMax(31, MotorType.kBrushless);
+  private CANSparkMax neog1 = new CANSparkMax(31, MotorType.kBrushless);
+  private CANSparkMax neog2 = new CANSparkMax(30, MotorType.kBrushless);
+  private CANSparkMax neod1 = new CANSparkMax(32, MotorType.kBrushless);
+  private CANSparkMax neod2 = new CANSparkMax(33, MotorType.kBrushless);
 
   private SpeedControllerGroup neog = new SpeedControllerGroup(neog1, neog2);
   private SpeedControllerGroup neod = new SpeedControllerGroup(neod1, neod2);
@@ -51,7 +51,7 @@ public class BasePilotable extends SubsystemBase {
 
   public BasePilotable() {
     resetEncodeur();
-    conversionEncodeur=(Math.PI*Units.inchesToMeters(7.24134))/(256*3*2.5); //roue de 7.24134 pouces déterminé manuellement, ratio 2.5:1 shaft-roue 3:1 encodeur-shaft encodeur 256 clic encodeur 
+    conversionEncodeur=(Math.PI*Units.inchesToMeters(7.24))/(256*3*2.5); //roue de 7.24134 pouces déterminé manuellement, ratio 2.5:1 shaft-roue 3:1 encodeur-shaft encodeur 256 clic encodeur 
     setRamp(0.15);
     encodeurg.setDistancePerPulse(conversionEncodeur);
     encodeurd.setDistancePerPulse(conversionEncodeur);

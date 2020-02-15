@@ -25,7 +25,7 @@ public class Gober extends CommandBase {
   @Override
   public void initialize() {
     gobeur.tiroirOut();
-    //gobeur.moteurGobe();
+    gobeur.moteurGobe();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -37,7 +37,7 @@ public class Gober extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    //gobeur.moteurStop();
+    gobeur.moteurStop();
     //il faut ajouter un délai entre ces deux actions
     
   }
