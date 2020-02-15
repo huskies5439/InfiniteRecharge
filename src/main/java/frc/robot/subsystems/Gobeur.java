@@ -20,6 +20,8 @@ public class Gobeur extends SubsystemBase {
    * Creates a new Gobeur.
    */
   public Gobeur() {
+    tiroirIn();
+    moteurStop();
 
   }
 

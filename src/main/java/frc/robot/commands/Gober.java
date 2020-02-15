@@ -38,7 +38,7 @@ public class Gober extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     gobeur.moteurStop();
-    //il faut ajouter un délai entre ces deux actions
+    gobeur.tiroirIn();
     
   }
 

@@ -39,13 +39,25 @@ public class BasePilotable extends SubsystemBase {
 
   private DoubleSolenoid vitesse = new DoubleSolenoid(0, 1);
 
-/*
+
   private enum State {
-    LOW, HIGH, AUTO
+    LOW(0), HIGH(1), AUTO(2);
+    private int stateValue;
+    State(int stateValue)
+   {
+     this.stateValue = stateValue;
+   }
+
+   public int getState()
+   {
+     return stateValue;
+   }
+   
+   
   }
   private State state = State.AUTO;
 
-  */
+  
     //Creates a new ExampleSubsystem.
    
 
@@ -55,8 +67,8 @@ public class BasePilotable extends SubsystemBase {
     setRamp(0.15);
     encodeurg.setDistancePerPulse(conversionEncodeur);
     encodeurd.setDistancePerPulse(conversionEncodeur);
-    //basseVitesse();
-    //(Math.PI*Units.inchesToMeters(8))
+    basseVitesse();
+    state= State.AUTO;
   }
 
   @Override
@@ -66,12 +78,16 @@ public class BasePilotable extends SubsystemBase {
     SmartDashboard.putNumber("VitesseG", getVitesseG());
     SmartDashboard.putNumber("VitesseD", getVitesseD());
     SmartDashboard.putNumber("Vitesse Moyenne", getVitesse());
-   /* 
-    if (getVitesse() > 1 & state == State.LOW) {
+    SmartDashboard.putNumber("State", state.getState());
+/*
+    if (RobotState.isAutonomous()){
+      state= State.AUTO;
+    }
+    else if (Math.abs(getVitesse()) > 2 && state == State.LOW) {
       hauteVitesse();
       state = State.HIGH;
     } 
-    else if (getVitesse() < 0.8 & state == State.HIGH) {
+    else if (Math.abs(getVitesse()) < 1 && state == State.HIGH) {
       basseVitesse();
       state = State.LOW;
     }
@@ -119,12 +135,12 @@ public class BasePilotable extends SubsystemBase {
     encodeurg.reset();
   }
 
-/*
+
   public void hauteVitesse() {
     vitesse.set(Value.kForward);
   }
 
   public void basseVitesse() {
     vitesse.set(Value.kReverse);
-  }*/
+  }
 }

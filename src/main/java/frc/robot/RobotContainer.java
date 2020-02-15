@@ -49,7 +49,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
     configureButtonBindings();
-    basePilotable.setDefaultCommand(new RunCommand(()-> basePilotable.conduire(1*pilote.getY(GenericHID.Hand.kLeft), 0.65*pilote.getX(GenericHID.Hand.kRight)),basePilotable));
+    basePilotable.setDefaultCommand(new RunCommand(()-> basePilotable.conduire(1*pilote.getY(GenericHID.Hand.kLeft), 0.5*pilote.getX(GenericHID.Hand.kRight)),basePilotable));
     //tourelle.setDefaultCommand(new TourelleManuelle((copilote.getTriggerAxis(Hand.kLeft)-copilote.getTriggerAxis(Hand.kRight))*1, tourelle));
     
   }                               
@@ -63,11 +63,11 @@ public class RobotContainer {
    */
    private void configureButtonBindings(){
    
-   new JoystickButton(pilote, Button.kA.value).toggleWhenPressed(new Gober(gobeur).andThen(new WaitCommand(2.0)).andThen(new InstantCommand(gobeur::tiroirIn, gobeur)));
+   new JoystickButton(pilote, Button.kBumperRight.value).whileHeld(new Gober(gobeur));
    
    new JoystickButton(pilote, Button.kY.value).toggleWhenPressed(new Lancer(lanceur));
+   new JoystickButton(pilote, Button.kB.value).whenPressed(new InstantCommand(basePilotable::hauteVitesse,basePilotable));
 
-   new JoystickButton(pilote, Button.kB.value).toggleWhenPressed(new InstantCommand(gobeur::tiroirOut, gobeur));
    
    //new JoystickButton(copilote, Button.kA.value).whenHeld(new TourelleAuto(tourelle));
   }
