@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class BasePilotable extends SubsystemBase {
@@ -32,34 +33,40 @@ public class BasePilotable extends SubsystemBase {
 
   private DifferentialDrive drive = new DifferentialDrive(neog, neod);
 
- // private Encoder encodeurg = new Encoder(1, 2);
-  //private Encoder encodeurd = new Encoder(1, 2);
+  private Encoder encodeurg = new Encoder(0, 1,false);
+  private Encoder encodeurd = new Encoder(2, 3,true);
+  private double conversionEncodeur;
 
- // private DoubleSolenoid vitesse = new DoubleSolenoid(0, 1);
+  private DoubleSolenoid vitesse = new DoubleSolenoid(0, 1);
+
 /*
   private enum State {
     LOW, HIGH, AUTO
   }
   private State state = State.AUTO;
-*/
-  /**
-   * Creates a new ExampleSubsystem.
-   */
+
+  */
+    //Creates a new ExampleSubsystem.
+   
 
   public BasePilotable() {
-    setRamp(0.25);
+    resetEncodeur();
+    conversionEncodeur=(Math.PI*Units.inchesToMeters(7.24134))/(256*3*2.5); //roue de 7.24134 pouces déterminé manuellement, ratio 2.5:1 shaft-roue 3:1 encodeur-shaft encodeur 256 clic encodeur 
+    setRamp(0.15);
+    encodeurg.setDistancePerPulse(conversionEncodeur);
+    encodeurd.setDistancePerPulse(conversionEncodeur);
     //basseVitesse();
-    
+    //(Math.PI*Units.inchesToMeters(8))
   }
 
   @Override
   public void periodic() {
-   /* SmartDashboard.putNumber("PositionG", getPositionG());
+    SmartDashboard.putNumber("PositionG", getPositionG());
     SmartDashboard.putNumber("PositionD", getPositionD());
     SmartDashboard.putNumber("VitesseG", getVitesseG());
     SmartDashboard.putNumber("VitesseD", getVitesseD());
     SmartDashboard.putNumber("Vitesse Moyenne", getVitesse());
-
+   /* 
     if (getVitesse() > 1 & state == State.LOW) {
       hauteVitesse();
       state = State.HIGH;
@@ -86,7 +93,7 @@ public class BasePilotable extends SubsystemBase {
     neod1.setOpenLoopRampRate(ramp);
     neod2.setOpenLoopRampRate(ramp);
   }
-/*
+
   public double getVitesseD() {
     return encodeurd.getRate();
   }
@@ -105,8 +112,14 @@ public class BasePilotable extends SubsystemBase {
 
   public double getPositionG() {
     return encodeurg.getDistance();
-  }// encoder= 256 pulse/tour
+  }
 
+  public void resetEncodeur() {
+    encodeurd.reset();
+    encodeurg.reset();
+  }
+
+/*
   public void hauteVitesse() {
     vitesse.set(Value.kForward);
   }

@@ -12,9 +12,13 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.commands.Gober;
+import frc.robot.commands.Lancer;
 import frc.robot.subsystems.BasePilotable;
 import frc.robot.subsystems.Gobeur;
+import frc.robot.subsystems.Lanceur;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
@@ -26,6 +30,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final BasePilotable basePilotable = new BasePilotable();
+  private final Lanceur lanceur = new Lanceur();
+  private final Gobeur gobeur = new Gobeur();
   
   
   
@@ -51,8 +57,10 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
    private void configureButtonBindings(){
-   //new JoystickButton(pilote, Button.kA.value).toggleWhenActive(new Gober(gobeur).andThen(new Wa));
    
+   new JoystickButton(pilote, Button.kA.value).toggleWhenActive(new Gober(gobeur).andThen(new WaitCommand(2.0)).andThen(new InstantCommand(gobeur::moteurStop, gobeur)));
+   
+   new JoystickButton(pilote, Button.kY.value).toggleWhenActive(new Lancer(lanceur));
  
   }
 
