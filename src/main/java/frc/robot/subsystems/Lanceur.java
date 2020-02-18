@@ -15,25 +15,27 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 
 
 
 public class Lanceur extends PIDSubsystem {
   private final CANSparkMax moteurLanceurDroit = new CANSparkMax(20,MotorType.kBrushless);
-  private final CANSparkMax moteurLanceurGauche = new CANSparkMax(21,MotorType.kBrushless);
+  private final CANSparkMax moteurLanceurGauche = new CANSparkMax(29,MotorType.kBrushless);
   private final SpeedControllerGroup moteurLanceur  = new SpeedControllerGroup(moteurLanceurDroit,moteurLanceurGauche);
-  private final SimpleMotorFeedforward lanceurFF = new SimpleMotorFeedforward(0,0);
+  private final SimpleMotorFeedforward lanceurFF = new SimpleMotorFeedforward(0.188,0.0855);
   
   /**
    * The shooter subsystem for the robot.
    */
   public Lanceur() {
-    super(new PIDController(0,0,0));
+    super(new PIDController(0.914,0,0));
     moteurLanceurDroit.setInverted(true);
-    getController().setTolerance(0);
-  //encodeurLanceur.setDistancePerPulse(0);
-    setSetpoint(0);
+    getController().setTolerance(50);
+    setSetpoint(3000);
+    moteurLanceurDroit.getEncoder().setVelocityConversionFactor(0.6667);
+    moteurLanceurGauche.getEncoder().setVelocityConversionFactor(0.6667);
   } 
   @Override
   public void useOutput(double output, double setpoint) {
@@ -42,9 +44,11 @@ public class Lanceur extends PIDSubsystem {
 
   @Override
   public double getMeasurement() {
-    return moteurLanceurDroit.getEncoder().getVelocity() + moteurLanceurGauche.getEncoder().getVelocity() ;
+        return getVitesse();
   }
 
+
+ 
   public boolean estBonneVitesse() {
     return m_controller.atSetpoint();
   }
@@ -54,6 +58,8 @@ public class Lanceur extends PIDSubsystem {
     
 
   }
-
+  public double getVitesse(){
+    return (moteurLanceurDroit.getEncoder().getVelocity() + moteurLanceurGauche.getEncoder().getVelocity())/2.0 ;
+  }
   
 }

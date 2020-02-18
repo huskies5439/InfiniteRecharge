@@ -37,25 +37,8 @@ public class BasePilotable extends SubsystemBase {
   private Encoder encodeurd = new Encoder(2, 3,true);
   private double conversionEncodeur;
 
-  private DoubleSolenoid vitesse = new DoubleSolenoid(0, 1);
+ 
 
-
-  private enum State {
-    LOW(0), HIGH(1), AUTO(2);
-    private int stateValue;
-    State(int stateValue)
-   {
-     this.stateValue = stateValue;
-   }
-
-   public int getState()
-   {
-     return stateValue;
-   }
-   
-   
-  }
-  private State state = State.AUTO;
 
   
     //Creates a new ExampleSubsystem.
@@ -67,8 +50,7 @@ public class BasePilotable extends SubsystemBase {
     setRamp(0.15);
     encodeurg.setDistancePerPulse(conversionEncodeur);
     encodeurd.setDistancePerPulse(conversionEncodeur);
-    basseVitesse();
-    state= State.AUTO;
+    
   }
 
   @Override
@@ -78,25 +60,7 @@ public class BasePilotable extends SubsystemBase {
     SmartDashboard.putNumber("VitesseG", getVitesseG());
     SmartDashboard.putNumber("VitesseD", getVitesseD());
     SmartDashboard.putNumber("Vitesse Moyenne", getVitesse());
-    SmartDashboard.putNumber("State", state.getState());
-/*
-    if (RobotState.isAutonomous()){
-      state= State.AUTO;
-    }
-    else if (Math.abs(getVitesse()) > 2 && state == State.LOW) {
-      hauteVitesse();
-      state = State.HIGH;
-    } 
-    else if (Math.abs(getVitesse()) < 1 && state == State.HIGH) {
-      basseVitesse();
-      state = State.LOW;
-    }
-    else if (state == State.AUTO) {
-      basseVitesse();
-      if (!RobotState.isAutonomous()) {
-        state = State.LOW;
-      }
-    }*/
+    
   }
 
   public void conduire(double vx, double vz) {
@@ -108,18 +72,6 @@ public class BasePilotable extends SubsystemBase {
     neog2.setOpenLoopRampRate(ramp);
     neod1.setOpenLoopRampRate(ramp);
     neod2.setOpenLoopRampRate(ramp);
-  }
-
-  public double getVitesseD() {
-    return encodeurd.getRate();
-  }
-
-  public double getVitesseG() {
-    return encodeurg.getRate();
-  }
-
-  public double getVitesse() {
-    return (getVitesseD() + getVitesseG()) / 2;
   }
 
   public double getPositionD() {
@@ -134,13 +86,16 @@ public class BasePilotable extends SubsystemBase {
     encodeurd.reset();
     encodeurg.reset();
   }
-
-
-  public void hauteVitesse() {
-    vitesse.set(Value.kForward);
+  public double getVitesseD() {
+    return encodeurd.getRate();
   }
 
-  public void basseVitesse() {
-    vitesse.set(Value.kReverse);
+  public double getVitesseG() {
+    return encodeurg.getRate();
   }
+  public double getVitesse() {
+    return (getVitesseD() + getVitesseG()) / 2;
+  }
+
+ 
 }
