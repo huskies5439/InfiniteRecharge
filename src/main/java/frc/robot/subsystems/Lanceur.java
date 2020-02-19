@@ -1,4 +1,3 @@
-
 /*----------------------------------------------------------------------------*/
 /* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
@@ -8,58 +7,62 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+public class Lanceur extends SubsystemBase {
 
-
-
-public class Lanceur extends PIDSubsystem {
   private final CANSparkMax moteurLanceurDroit = new CANSparkMax(20,MotorType.kBrushless);
   private final CANSparkMax moteurLanceurGauche = new CANSparkMax(29,MotorType.kBrushless);
   private final SpeedControllerGroup moteurLanceur  = new SpeedControllerGroup(moteurLanceurDroit,moteurLanceurGauche);
-  private final SimpleMotorFeedforward lanceurFF = new SimpleMotorFeedforward(0.188,0.0855);
-  
-  /**
-   * The shooter subsystem for the robot.
-   */
-  public Lanceur() {
-    super(new PIDController(0.914,0,0));
-    moteurLanceurDroit.setInverted(true);
-    getController().setTolerance(50);
-    setSetpoint(3000);
-    moteurLanceurDroit.getEncoder().setVelocityConversionFactor(0.6667);
-    moteurLanceurGauche.getEncoder().setVelocityConversionFactor(0.6667);
-  } 
-  @Override
-  public void useOutput(double output, double setpoint) {
-    moteurLanceur.setVoltage(output + lanceurFF.calculate(setpoint));
-  }
-
-  @Override
-  public double getMeasurement() {
-        return getVitesse();
-  }
-
-
+  private final SimpleMotorFeedforward lanceurFF = new SimpleMotorFeedforward(0.188,0.001412);
+ private PIDController pid = new PIDController(0.003, 0, 0);//.914/60/10
  
-  public boolean estBonneVitesse() {
-    return m_controller.atSetpoint();
+  public Lanceur() {
+    moteurLanceurDroit.setInverted(true);
+    pid.setTolerance(10);
+    setConversionFactors(1.5);
+    moteurLanceurGauche.setIdleMode(IdleMode.kCoast);
+    moteurLanceurDroit.setIdleMode(IdleMode.kCoast);
   }
-  public void vitesselancer(double v) {
-    moteurLanceur.set(v);
-  
-    
 
+  @Override
+  public void periodic() {
+   SmartDashboard.putNumber("vitesse lanceur", getVitesse());
+   SmartDashboard.putNumber("Position lanceur", getPosition());
+  }
+  public void setConversionFactors(double facteur){
+    moteurLanceurDroit.getEncoder().setPositionConversionFactor(facteur);
+    moteurLanceurGauche.getEncoder().setPositionConversionFactor(facteur);
+    moteurLanceurDroit.getEncoder().setVelocityConversionFactor(facteur);
+    moteurLanceurGauche.getEncoder().setVelocityConversionFactor(facteur);
+  }
+  public boolean estBonneVitesse() {
+    return pid.atSetpoint();
+  }
+
+  public void setVitesse(double voltage) {
+    moteurLanceur.setVoltage(voltage);
+  
   }
   public double getVitesse(){
     return (moteurLanceurDroit.getEncoder().getVelocity() + moteurLanceurGauche.getEncoder().getVelocity())/2.0 ;
   }
-  
+  public double getPosition(){
+    return (moteurLanceurDroit.getEncoder().getPosition() + moteurLanceurGauche.getEncoder().getPosition())/2.0;
+  }
+  public void stop(){
+    setVitesse(0);
+  }
+  public void pidfController(double vcible){
+    setVitesse(pid.calculate(getVitesse(),vcible)+lanceurFF.calculate(vcible));
+  }
 }

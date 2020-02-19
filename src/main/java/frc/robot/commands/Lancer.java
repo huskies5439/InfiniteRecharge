@@ -10,42 +10,40 @@ package frc.robot.commands;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Lanceur;
 
 public class Lancer extends CommandBase {
   Lanceur lanceur;
   private ShuffleboardTab tab = Shuffleboard.getTab("SmartDashboard");
-  private NetworkTableEntry vlanceurmax =tab.add("vlanceurmax", 1).getEntry();
-  /**
-   * Creates a new Lancer.
-   */
+  private NetworkTableEntry vcible =tab.add("vitesse lanceur cible", 1).getEntry();
+ 
+  
   public Lancer( Lanceur lanceur ) {
     this.lanceur= lanceur;
     addRequirements(lanceur);
 
 
-    // Use addRequirements() here to declare subsystem dependencies.
+    
   }
 
-  // Called when the command is initially scheduled.
+ 
   @Override
   public void initialize() {
 
-    lanceur.vitesselancer(vlanceurmax.getDouble(0));
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    lanceur.pidfController(7800);
     
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    lanceur.vitesselancer(0);
+    lanceur.stop();
   }
 
   // Returns true when the command should end.
