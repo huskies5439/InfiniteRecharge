@@ -7,14 +7,19 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.sensors.PigeonIMU;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
-
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -34,30 +39,39 @@ public class BasePilotable extends SubsystemBase {
   private Encoder encodeurd = new Encoder(2, 3,true);
   private double conversionEncodeur;
 
- 
+  private PigeonIMU gyro = new PigeonIMU(3);
+  private double[] ypr = new double[3];
+  //private double[] ypr_dps = new double[3];
 
+  private DifferentialDriveOdometry odometrie;
 
+  
   
     //Creates a new ExampleSubsystem.
    
 
   public BasePilotable() {
     resetEncodeur();
-    conversionEncodeur=(Math.PI*Units.inchesToMeters(7.24))/(256*3*2.5); //roue de 7.24134 pouces déterminé manuellement, ratio 2.5:1 shaft-roue 3:1 encodeur-shaft encodeur 256 clic encodeur 
-    setRamp(0.15);
+    resetGyro();
+    conversionEncodeur=Math.PI*0.1846/(256*3*2.5); //roue de 18.46 cm déterminé manuellement, ratio 2.5:1 shaft-roue 3:1 encodeur-shaft encodeur 256 clic encodeur 
+    setRamp(0.25);
     encodeurg.setDistancePerPulse(conversionEncodeur);
     encodeurd.setDistancePerPulse(conversionEncodeur);
-    
+    setNeutralMode(IdleMode.kCoast);
+    odometrie= new DifferentialDriveOdometry(Rotation2d.fromDegrees(getAngle()));
   }
 
   @Override
   public void periodic() {
+    odometrie.update(Rotation2d.fromDegrees(getAngle()), getPositionG(), getPositionD());
+    SmartDashboard.putNumberArray("odometrie", getOdometry());
     SmartDashboard.putNumber("PositionG", getPositionG());
     SmartDashboard.putNumber("PositionD", getPositionD());
     SmartDashboard.putNumber("VitesseG", getVitesseG());
     SmartDashboard.putNumber("VitesseD", getVitesseD());
     SmartDashboard.putNumber("Vitesse Moyenne", getVitesse());
-    
+    SmartDashboard.putNumber("NeoEncoder", getNeoEncoder());
+    SmartDashboard.putNumber("Gyro", getAngle());
   }
 
   public void conduire(double vx, double vz) {
@@ -70,7 +84,17 @@ public class BasePilotable extends SubsystemBase {
     neod1.setOpenLoopRampRate(ramp);
     neod2.setOpenLoopRampRate(ramp);
   }
-
+  
+  public void setNeutralMode(IdleMode mode){
+    neog1.setIdleMode(mode);
+    neog2.setIdleMode(mode);
+    neod1.setIdleMode(mode);
+    neod2.setIdleMode(mode);
+  }
+  
+  public double getNeoEncoder(){
+    return neod1.getEncoder().getPosition();
+  }
   public double getPositionD() {
     return encodeurd.getDistance();
   }
@@ -93,6 +117,56 @@ public class BasePilotable extends SubsystemBase {
   public double getVitesse() {
     return (getVitesseD() + getVitesseG()) / 2;
   }
+  //////après ce commentaire = Ramsete
+ public double getAngle() {
+    gyro.getYawPitchRoll(ypr);
+    return ypr[0]*-1;
+  } 
+  
+  public void resetGyro() {
+    gyro.setYaw(0);
+    //gyro.setFusedHeading(0); Copier depuis trajectory-betabot. Utile ???
+  }
+  
+  public double[] getOdometry(){
+    double[] position = new double[3];
+    double x = getPose().getTranslation().getX();
+    double y = getPose().getTranslation().getY();
+    double theta = getPose().getRotation().getDegrees();
+    position[0] = x;
+    position[1] = y;
+    position[2] = theta;
+    return position;
+
+  }
 
  
+  public Pose2d getPose() {
+    return odometrie.getPoseMeters();
+  }
+
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    return new DifferentialDriveWheelSpeeds(getVitesseG(), getVitesseD());
+  }
+
+  public void resetOdometrie(Pose2d pose) {
+    resetEncodeur();
+    resetGyro();
+    odometrie.resetPosition(pose, Rotation2d.fromDegrees(getAngle()));
+  }
+
+  public void tankDriveVolts(double leftVolts, double rightVolts) {
+    neog.setVoltage(leftVolts);
+    neod.setVoltage(-rightVolts);
+    drive.feed();
+  }
+ 
+
+ 
+/*
+  public double getTurnRate() {
+    gyro.getRawGyro(ypr_dps);
+
+    return ypr_dps[0]*-1;
+  }*/
 }

@@ -32,6 +32,8 @@ public class Lanceur extends SubsystemBase {
     setConversionFactors(1.5);
     moteurLanceurGauche.setIdleMode(IdleMode.kCoast);
     moteurLanceurDroit.setIdleMode(IdleMode.kCoast);
+    moteurLanceurDroit.burnFlash();
+    moteurLanceurGauche.burnFlash();
   }
 
   @Override
@@ -44,6 +46,8 @@ public class Lanceur extends SubsystemBase {
     moteurLanceurGauche.getEncoder().setPositionConversionFactor(facteur);
     moteurLanceurDroit.getEncoder().setVelocityConversionFactor(facteur);
     moteurLanceurGauche.getEncoder().setVelocityConversionFactor(facteur);
+    moteurLanceurDroit.burnFlash();
+    moteurLanceurGauche.burnFlash();
   }
   public boolean estBonneVitesse() {
     return pid.atSetpoint();

@@ -15,18 +15,14 @@ import frc.robot.subsystems.Lanceur;
 
 public class Lancer extends CommandBase {
   Lanceur lanceur;
-  private ShuffleboardTab tab = Shuffleboard.getTab("SmartDashboard");
-  private NetworkTableEntry vcible =tab.add("vitesse lanceur cible", 1).getEntry();
+ // private ShuffleboardTab tab = Shuffleboard.getTab("SmartDashboard");
+  //private NetworkTableEntry vcible =tab.add("vitesse lanceur cible", 1).getEntry();
  
   
   public Lancer( Lanceur lanceur ) {
     this.lanceur= lanceur;
-    addRequirements(lanceur);
-
-
-    
+    addRequirements(lanceur); 
   }
-
  
   @Override
   public void initialize() {
@@ -36,7 +32,8 @@ public class Lancer extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    lanceur.pidfController(7800);
+    //7800, pageau sest plain que cetait pas max speed
+    lanceur.pidfController(8000);
     
   }
 

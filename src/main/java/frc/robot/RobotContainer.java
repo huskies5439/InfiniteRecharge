@@ -7,9 +7,21 @@
 
 package frc.robot;
 
+import java.util.List;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.RamseteController;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.wpilibj.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import frc.robot.commands.ChangementVitesse;
 import frc.robot.commands.Gober;
 import frc.robot.commands.Lancer;
@@ -18,6 +30,8 @@ import frc.robot.subsystems.BasePilotable;
 import frc.robot.subsystems.Gobeur;
 import frc.robot.subsystems.Lanceur;
 import frc.robot.subsystems.Transmission;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -30,15 +44,15 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final BasePilotable basePilotable = new BasePilotable();
-  private final Lanceur lanceur = new Lanceur();
+ private final Lanceur lanceur = new Lanceur();
   private final Gobeur gobeur = new Gobeur();
   private final Transmission transmission = new Transmission();
   //private final Tourelle tourelle = new Tourelle();
-  
+  Trajectory exampleTrajectory = null;
   
   
   XboxController pilote = new XboxController(0);
-  XboxController copilote = new XboxController(1);
+  //XboxController copilote = new XboxController(1);
   
 
   /**
@@ -63,10 +77,7 @@ public class RobotContainer {
    new JoystickButton(pilote, Button.kBumperRight.value).whileHeld(new Gober(gobeur));
    
    new JoystickButton(pilote, Button.kY.value).toggleWhenPressed(new Lancer(lanceur));
-  // new JoystickButton(pilote, Button.kB.value).whenPressed(new InstantCommand(lanceur::disable,lanceur));
-   //new JoystickButton(pilote, Button.kA.value).whenPressed(new InstantCommand(lanceur::enable,lanceur));
-
-   
+  
    //new JoystickButton(copilote, Button.kA.value).whenHeld(new TourelleAuto(tourelle));
   }
 
@@ -76,8 +87,40 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  //public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    //return m_autoCommand;
-  //}
+  public Command getAutonomousCommand() {
+     //An ExampleCommand will run in autonomous
+     var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(new SimpleMotorFeedforward(0.128, 1.83, 0.204),
+        Constants.kinematics, 10); // 0.109, 1.87, 0.216
+
+    TrajectoryConfig config = new TrajectoryConfig(1, 0.5)// max speed, max acceleration
+        // Add kinematics to ensure max speed is actually obeyed
+        .setKinematics(Constants.kinematics)
+        // Apply the voltage constraint
+        .addConstraint(autoVoltageConstraint);
+        exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+          // Start at the origin facing the +X direction
+          new Pose2d(0, 0, new Rotation2d(0)),
+          // Pass through these two interior waypoints, making an 's' curve path
+          List.of(
+              new Translation2d(1, 1),
+              new Translation2d(2, -1)
+          ),
+          // End 3 meters straight ahead of where we started, facing forward
+          new Pose2d(3, 0, new Rotation2d(0)),
+          // Pass config
+          config
+      );
+      RamseteCommand ramseteCommand = new RamseteCommand(exampleTrajectory, basePilotable::getPose,
+      new RamseteController(2, 0.7), 
+      new SimpleMotorFeedforward(0.166, 1.8, 0.186), 
+      Constants.kinematics,
+      basePilotable::getWheelSpeeds, 
+      new PIDController(1, 0, 0), 
+      new PIDController(1, 0, 0), // 7.8
+      // RamseteCommand passes volts to the callback
+      basePilotable::tankDriveVolts, basePilotable);// 8.92
+
+      return ramseteCommand.andThen(() -> 
+      basePilotable.tankDriveVolts(0, 0));
+  }
 }
