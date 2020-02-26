@@ -15,6 +15,7 @@ import frc.robot.subsystems.Tourelle;
 public class TourelleAuto extends CommandBase {
   Tourelle tourelle;
   Limelight limelight;
+  double vitesse;
 
   /**
    * Creates a new TourelleAuto.
@@ -37,16 +38,19 @@ public class TourelleAuto extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(tourelle.getSoftLimit()){
-      if(limelight.getTv()){
-        tourelle.pidController(limelight.getTx());
-        SmartDashboard.putString("Avertissement Cible", "YA UNE CIBLE !!!");  
-      }
-      else{
-        SmartDashboard.putString("Avertissement Cible", "PAS DE CIBLE !!!");     
-       }
+
+    if (limelight.getTv()) {
+      vitesse = tourelle.pidController(limelight.getTx());
+      SmartDashboard.putString("Avertissement Cible", "YA UNE CIBLE !!!");
+        if (tourelle.getSoftLimit(vitesse)) {
+          tourelle.setVoltage(vitesse);
+        }
+        else {
+          tourelle.stop();
+        }
     }
-    else{
+    else {
+      SmartDashboard.putString("Avertissement Cible", "PAS DE CIBLE !!!");
       tourelle.stop();
     }
   }

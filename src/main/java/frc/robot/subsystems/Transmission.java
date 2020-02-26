@@ -12,14 +12,14 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Transmission extends SubsystemBase {
-  private DoubleSolenoid vitesse = new DoubleSolenoid(0, 7);
+  private DoubleSolenoid vitesse = new DoubleSolenoid(0, 1);
  
   
   /**
    * Creates a new Transmission.
    */
   public Transmission() {
-   // basseVitesse();
+    basseVitesse();
    
 
   }
@@ -34,11 +34,11 @@ public class Transmission extends SubsystemBase {
     
      
   }
-
+  //Haute vitesse
   public void hauteVitesse() {
     vitesse.set(Value.kForward);
   }
-
+  //Basse vitesse
   public void basseVitesse() {
     vitesse.set(Value.kReverse);
   }

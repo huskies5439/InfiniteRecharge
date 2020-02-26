@@ -21,33 +21,32 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Lanceur extends SubsystemBase {
 
   private final CANSparkMax moteurLanceurDroit = new CANSparkMax(20,MotorType.kBrushless);
-  private final CANSparkMax moteurLanceurGauche = new CANSparkMax(29,MotorType.kBrushless);
+  private final CANSparkMax moteurLanceurGauche = new CANSparkMax(38,MotorType.kBrushless);
   private final SpeedControllerGroup moteurLanceur  = new SpeedControllerGroup(moteurLanceurDroit,moteurLanceurGauche);
   private final SimpleMotorFeedforward lanceurFF = new SimpleMotorFeedforward(0.188,0.001412);
  private PIDController pid = new PIDController(0.003, 0, 0);//.914/60/10
  
   public Lanceur() {
     moteurLanceurDroit.setInverted(true);
+    moteurLanceurGauche.setInverted(false);
     pid.setTolerance(10);
     setConversionFactors(1.5);
     moteurLanceurGauche.setIdleMode(IdleMode.kCoast);
     moteurLanceurDroit.setIdleMode(IdleMode.kCoast);
-    moteurLanceurDroit.burnFlash();
-    moteurLanceurGauche.burnFlash();
+
   }
 
   @Override
   public void periodic() {
    SmartDashboard.putNumber("vitesse lanceur", getVitesse());
-   SmartDashboard.putNumber("Position lanceur", getPosition());
+   //SmartDashboard.putNumber("Position lanceur", getPosition());
   }
   public void setConversionFactors(double facteur){
     moteurLanceurDroit.getEncoder().setPositionConversionFactor(facteur);
     moteurLanceurGauche.getEncoder().setPositionConversionFactor(facteur);
     moteurLanceurDroit.getEncoder().setVelocityConversionFactor(facteur);
     moteurLanceurGauche.getEncoder().setVelocityConversionFactor(facteur);
-    moteurLanceurDroit.burnFlash();
-    moteurLanceurGauche.burnFlash();
+    
   }
   public boolean estBonneVitesse() {
     return pid.atSetpoint();

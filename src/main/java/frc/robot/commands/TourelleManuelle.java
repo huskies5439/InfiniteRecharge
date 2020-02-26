@@ -7,33 +7,37 @@
 
 package frc.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Tourelle;
 
 public class TourelleManuelle extends CommandBase {
   Tourelle tourelle;
-  double vInput;
+  DoubleSupplier vInput;
   /**
    * Creates a new TourelleManuelle.
    */
-  public TourelleManuelle(double vInput,Tourelle tourelle){
+  public TourelleManuelle(DoubleSupplier vInput,Tourelle tourelle){
     // Use addRequirements() here to declare subsystem dependencies.
     this.tourelle=tourelle;
     this.vInput=vInput;
     addRequirements(tourelle);
+
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
+    tourelle.ramp(0.15);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(tourelle.getSoftLimit()){
-      tourelle.setVitesse(vInput);
+    
+    if(tourelle.getSoftLimit(vInput.getAsDouble())){
+      tourelle.setVoltage(vInput.getAsDouble()*12.0);
     }
     else{
       tourelle.stop();

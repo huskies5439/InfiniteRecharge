@@ -9,6 +9,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
@@ -17,53 +19,59 @@ import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Tourelle extends SubsystemBase {
-  private WPI_TalonSRX moteurTourelle = new WPI_TalonSRX(13);
-  private Encoder encoderTourelle = new Encoder(1, 2);
-  private ProfiledPIDController pid = new ProfiledPIDController(0, 0, 0,
-      new TrapezoidProfile.Constraints(/* max speed/sec */0, /* max acceleration/sec */0));
+  private CANSparkMax neotourelle = new CANSparkMax(28,MotorType.kBrushless);
+  private ProfiledPIDController pid = new ProfiledPIDController(0.25, 0, 0,
+      new TrapezoidProfile.Constraints(/* max speed/sec */5, /* max acceleration/sec */5));
   private boolean softLimit;
 
   /**
    * Creates a new Tourelle.
    */
   public Tourelle() {
-    encoderTourelle.setDistancePerPulse(1);// idk la valeur
+    neotourelle.getEncoder().setPositionConversionFactor(3.6);//1 tour tourelle/5 tour planetary,20 tour neo pour 1 tour planetary,360 par tpour tourelle
+    neotourelle.getEncoder().setVelocityConversionFactor(0.06);//ratio position/60 secs
     pid.setTolerance(1);
+    resetEncoder();
+    neotourelle.setInverted(true);
+  }
+  public void ramp(double ramp){
+    neotourelle.setOpenLoopRampRate(ramp);
   }
 
   public double getPosition() {
-    return encoderTourelle.getDistance();
+    return neotourelle.getEncoder().getPosition();
   }
 
   public double getVitesse() {
-    return encoderTourelle.getRate();
+    return neotourelle.getEncoder().getVelocity();
   }
 
-  public void pidController(double mesure) {
-    setVitesse(pid.calculate(mesure, 0));
+  public double pidController(double mesure) { 
+    return pid.calculate(mesure, 0);
   }
 
-  public void setVitesse(double v) {
-    moteurTourelle.set(ControlMode.PercentOutput, v);
+  public void setVoltage(double v) {
+    neotourelle.setVoltage(v);
   }
 
   public void stop() {
-    moteurTourelle.set(ControlMode.PercentOutput, 0.0);
+    neotourelle.setVoltage(0.0);
   }
 
-  public boolean getSoftLimit() {
-    return softLimit;
+  public boolean getSoftLimit(double vinput) {
+    return Math.abs(getPosition()) < 50 || Math.signum(getPosition()) != Math.signum(vinput);
   }
 
   public boolean estCentre() {
     return pid.atSetpoint();
   }
+  public void resetEncoder(){
+    neotourelle.getEncoder().setPosition(0);
+  }
 
   @Override
   public void periodic() {
-    softLimit = Math.abs(getPosition()) < 45 || Math.signum(getPosition()) != Math.signum(getVitesse());
-    SmartDashboard.putBoolean("Tourelle ok ?", softLimit);
-    SmartDashboard.putNumber("Angle", getPosition());
-    SmartDashboard.putNumber("Vitesse", getVitesse());
+    SmartDashboard.putNumber("AngleTourelle", getPosition());
+    SmartDashboard.putNumber("VitesseTourelle", getVitesse());
   }
 }

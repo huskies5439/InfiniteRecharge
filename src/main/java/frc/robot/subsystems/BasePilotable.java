@@ -59,23 +59,25 @@ public class BasePilotable extends SubsystemBase {
     encodeurd.setDistancePerPulse(conversionEncodeur);
     setNeutralMode(IdleMode.kCoast);
     odometrie= new DifferentialDriveOdometry(Rotation2d.fromDegrees(getAngle()));
+    neog.setInverted(true);
+    neod.setInverted(true);
   }
 
   @Override
   public void periodic() {
     odometrie.update(Rotation2d.fromDegrees(getAngle()), getPositionG(), getPositionD());
     SmartDashboard.putNumberArray("odometrie", getOdometry());
-    SmartDashboard.putNumber("PositionG", getPositionG());
-    SmartDashboard.putNumber("PositionD", getPositionD());
-    SmartDashboard.putNumber("VitesseG", getVitesseG());
-    SmartDashboard.putNumber("VitesseD", getVitesseD());
+    //SmartDashboard.putNumber("VitesseG", getVitesseG());
+    //SmartDashboard.putNumber("VitesseD", getVitesseD());
     SmartDashboard.putNumber("Vitesse Moyenne", getVitesse());
+    SmartDashboard.putNumber("Position Moyenne", getPositionMoyenne());
     SmartDashboard.putNumber("NeoEncoder", getNeoEncoder());
     SmartDashboard.putNumber("Gyro", getAngle());
+
   }
 
   public void conduire(double vx, double vz) {
-    drive.curvatureDrive(vx, -vz, Math.abs(vx)<0.2);
+    drive.arcadeDrive(-vx, vz);
   }
 
   public void setRamp(double ramp) {
@@ -93,7 +95,7 @@ public class BasePilotable extends SubsystemBase {
   }
   
   public double getNeoEncoder(){
-    return neod1.getEncoder().getPosition();
+    return neog1.getEncoder().getPosition();
   }
   public double getPositionD() {
     return encodeurd.getDistance();
@@ -101,6 +103,10 @@ public class BasePilotable extends SubsystemBase {
 
   public double getPositionG() {
     return encodeurg.getDistance();
+  }
+
+  public double getPositionMoyenne(){
+    return (getPositionG()+getPositionD())/2.0;
   }
 
   public void resetEncodeur() {
@@ -120,7 +126,7 @@ public class BasePilotable extends SubsystemBase {
   //////après ce commentaire = Ramsete
  public double getAngle() {
     gyro.getYawPitchRoll(ypr);
-    return ypr[0]*-1;
+    return ypr[0];
   } 
   
   public void resetGyro() {

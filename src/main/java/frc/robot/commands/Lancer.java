@@ -10,18 +10,19 @@ package frc.robot.commands;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Lanceur;
 
 public class Lancer extends CommandBase {
   Lanceur lanceur;
- // private ShuffleboardTab tab = Shuffleboard.getTab("SmartDashboard");
-  //private NetworkTableEntry vcible =tab.add("vitesse lanceur cible", 1).getEntry();
+  private ShuffleboardTab tab = Shuffleboard.getTab("calibration");
+  private NetworkTableEntry vcible =tab.addPersistent("vitesse lanceur cible", 1).getEntry();
  
   
   public Lancer( Lanceur lanceur ) {
     this.lanceur= lanceur;
-    addRequirements(lanceur); 
+    addRequirements(lanceur);
   }
  
   @Override
@@ -32,8 +33,7 @@ public class Lancer extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //7800, pageau sest plain que cetait pas max speed
-    lanceur.pidfController(8000);
+   lanceur.pidfController(vcible.getDouble(0));
     
   }
 

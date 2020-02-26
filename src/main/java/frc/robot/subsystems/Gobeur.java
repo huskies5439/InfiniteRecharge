@@ -20,9 +20,10 @@ public class Gobeur extends SubsystemBase {
    * Creates a new Gobeur.
    */
   public Gobeur() {
+    rouleau.setInverted(false);
     tiroirIn();
     moteurStop();
-
+    
   }
 
   @Override
