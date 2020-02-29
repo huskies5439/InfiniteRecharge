@@ -7,12 +7,10 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.Encoder;
+
 import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
@@ -21,8 +19,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Tourelle extends SubsystemBase {
   private CANSparkMax neotourelle = new CANSparkMax(28,MotorType.kBrushless);
   private ProfiledPIDController pid = new ProfiledPIDController(0.25, 0, 0,
-      new TrapezoidProfile.Constraints(/* max speed/sec */5, /* max acceleration/sec */5));
-  private boolean softLimit;
+      new TrapezoidProfile.Constraints(/* max speed  m/sec */5, /* max acceleration m/sec² */5));
 
   /**
    * Creates a new Tourelle.

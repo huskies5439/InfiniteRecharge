@@ -19,18 +19,20 @@ import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import frc.robot.commands.BarrerGrimpeur;
 import frc.robot.commands.ChangementVitesse;
 import frc.robot.commands.Gober;
 import frc.robot.commands.Lancer;
+import frc.robot.commands.ResetGrimpeur;
 import frc.robot.commands.TourelleAuto;
 import frc.robot.commands.TourelleManuelle;
 import frc.robot.subsystems.BasePilotable;
 import frc.robot.subsystems.Gobeur;
+import frc.robot.subsystems.Grimpeur;
 import frc.robot.subsystems.Lanceur;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Tourelle;
@@ -41,30 +43,21 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
-/**
- * This class is where the bulk of the robot should be declared.  Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
- * (including subsystems, commands, and button mappings) should be declared here.
- */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
   private final BasePilotable basePilotable = new BasePilotable();
   private final Lanceur lanceur = new Lanceur();
   private final Gobeur gobeur = new Gobeur();
   private final Transmission transmission = new Transmission();
   private final Limelight limelight = new Limelight();
   private final Tourelle tourelle = new Tourelle();
+  private final Grimpeur grimpeur = new Grimpeur();
   Trajectory exampleTrajectory = null;
   
   
   XboxController pilote = new XboxController(0);
   //XboxController copilote = new XboxController(1);
-  
 
-  /**
-   * The container for the robot.  Contains subsystems, OI devices, and commands.
-   */
+ 
   public RobotContainer() {
     configureButtonBindings();
     basePilotable.setDefaultCommand(new RunCommand(()-> basePilotable.conduire(1.0*pilote.getY(GenericHID.Hand.kLeft), 0.7*pilote.getX(GenericHID.Hand.kRight)),basePilotable));
@@ -72,30 +65,24 @@ public class RobotContainer {
     transmission.setDefaultCommand(new ChangementVitesse(basePilotable, transmission));
   }                               
 
-
-  /**
-   * Use this method to define your button->command mappings.  Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a
-   * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-   */
    private void configureButtonBindings(){
-   
+
    new JoystickButton(pilote, Button.kBumperRight.value).whileHeld(new Gober(gobeur));
+
+   new JoystickButton(pilote, Button.kStart.value).whenPressed(new BarrerGrimpeur(grimpeur));
    
-   new JoystickButton(pilote, Button.kY.value).toggleWhenPressed(new Lancer(lanceur));
+   new JoystickButton(pilote, Button.kBack.value).whenPressed(new ResetGrimpeur(()->(pilote.getY(GenericHID.Hand.kLeft)),grimpeur));
+
+   new JoystickButton(pilote, Button.kY.value).toggleWhenPressed(new Lancer(lanceur,limelight));
+    //Tir manuelle pour dégager les ballons.(Coplilote, valider bouton)
+   new JoystickButton(pilote, Button.kBumperLeft.value).whileHeld(new RunCommand(()->lanceur.setVitesse(11), lanceur).andThen(new InstantCommand(lanceur::stop)));
   
    new JoystickButton(pilote, Button.kA.value).whileHeld(new TourelleAuto(tourelle,limelight));
    //new JoystickButton(pilote, Button.kB.value).whenPressed(new InstantCommand(transmission::basseVitesse,transmission));
    //new JoystickButton(pilote, Button.kX.value).whenPressed(new InstantCommand(transmission::hauteVitesse,transmission));
    }
-  /*
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
+ 
   public Command getAutonomousCommand() {
-     //An ExampleCommand will run in autonomous
      var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(new SimpleMotorFeedforward(0.25, 1.95, 0.312),
         Constants.kinematics, 5); // 0.25, 1.95, 0.312
 

@@ -10,18 +10,23 @@ package frc.robot.commands;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Lanceur;
+import frc.robot.subsystems.Limelight;
 
 public class Lancer extends CommandBase {
   Lanceur lanceur;
+  Limelight limelight;
+  double ta;
+  double vCible;
+
+  //Donne vitesse a partir ShuffleBoard
   private ShuffleboardTab tab = Shuffleboard.getTab("calibration");
-  private NetworkTableEntry vcible =tab.addPersistent("vitesse lanceur cible", 1).getEntry();
- 
-  
-  public Lancer( Lanceur lanceur ) {
+  private NetworkTableEntry vDashboard =tab.addPersistent("vitesse lanceur cible", 1).getEntry();
+
+  public Lancer( Lanceur lanceur, Limelight limelight ) {
     this.lanceur= lanceur;
+    this.limelight=limelight;
     addRequirements(lanceur);
   }
  
@@ -33,7 +38,10 @@ public class Lancer extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-   lanceur.pidfController(vcible.getDouble(0));
+   /*ta =limelight.getTa();
+   vCible = ta*10;*/
+   vCible = vDashboard.getDouble(0);
+   lanceur.pidfController(vCible);
     
   }
 

@@ -10,35 +10,24 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+//ok
 public class Transmission extends SubsystemBase {
   private DoubleSolenoid vitesse = new DoubleSolenoid(0, 1);
  
   
-  /**
-   * Creates a new Transmission.
-   */
   public Transmission() {
     basseVitesse();
-   
-
   }
 
   @Override
-  public void periodic() {
-    
- 
-    
-
-    // This method will be called once per scheduler run
-    
+  public void periodic() {    
      
   }
-  //Haute vitesse
+
   public void hauteVitesse() {
     vitesse.set(Value.kForward);
   }
-  //Basse vitesse
+ 
   public void basseVitesse() {
     vitesse.set(Value.kReverse);
   }

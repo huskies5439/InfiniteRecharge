@@ -7,7 +7,7 @@
 
 package frc.robot.subsystems;
 
-import java.util.DoubleSummaryStatistics;
+
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
@@ -45,8 +45,8 @@ public class Grimpeur extends SubsystemBase {
     servo.setAngle(10);
   }
 
-  public void debarrer(){
-    servo.setAngle(170);  
+  public void angleServo(double angle){
+    servo.setAngle(angle);
   }
 
   public double getVelocity(){
@@ -68,4 +68,5 @@ public class Grimpeur extends SubsystemBase {
   public void alignement(double v){
     bougeur.set(v);
   }
+
 }
