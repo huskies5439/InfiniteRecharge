@@ -29,7 +29,7 @@ public class Lanceur extends SubsystemBase {
   public Lanceur() {
     moteurLanceurDroit.setInverted(true);
     moteurLanceurGauche.setInverted(false);
-    pid.setTolerance(10);
+    pid.setTolerance(100);
     setConversionFactors(1.5);
     moteurLanceurGauche.setIdleMode(IdleMode.kCoast);
     moteurLanceurDroit.setIdleMode(IdleMode.kCoast);

@@ -25,11 +25,11 @@ public class Transmission extends SubsystemBase {
   }
 
   public void hauteVitesse() {
-    vitesse.set(Value.kForward);
+    vitesse.set(Value.kReverse);
   }
  
   public void basseVitesse() {
-    vitesse.set(Value.kReverse);
+    vitesse.set(Value.kForward);
   }
  
   

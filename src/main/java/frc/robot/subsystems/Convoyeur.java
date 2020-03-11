@@ -35,11 +35,11 @@ public class Convoyeur extends SubsystemBase {
     SmartDashboard.putBoolean("Capteur sortie", sortie.get());
   }
 
-  public void convoyeurLancer() {
-    convoyeur.set(1);
+  public void fournirBalle() {
+    convoyeur.set(0.75);
   }
 
-  public void convoyeurGober() {
+  public void indexer() {
     if (!sortie.get() & entree.get()) {
       convoyeur.set(0.5);
     } else {
@@ -47,7 +47,7 @@ public class Convoyeur extends SubsystemBase {
     }
   }
 
-  public void convoyeurStop() {
+  public void stop() {
     convoyeur.set(0);
   }
 }
