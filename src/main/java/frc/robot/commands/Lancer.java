@@ -19,10 +19,11 @@ public class Lancer extends CommandBase {
   Limelight limelight;
   double ta;
   double vCible;
-
+/*
   //Donne vitesse a partir ShuffleBoard
   private ShuffleboardTab tab = Shuffleboard.getTab("calibration");
   private NetworkTableEntry vDashboard =tab.addPersistent("vitesse lanceur cible", 1).getEntry();
+*/
 
   public Lancer( Lanceur lanceur, Limelight limelight ) {
     this.lanceur= lanceur;
@@ -40,7 +41,9 @@ public class Lancer extends CommandBase {
   public void execute() {
    /*ta =limelight.getTa();
    vCible = ta*10;*/
-   vCible = vDashboard.getDouble(0);
+
+   //vCible = vDashboard.getDouble(0);
+   vCible=4000;
    lanceur.pidfController(vCible);
     
   }

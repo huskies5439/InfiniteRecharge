@@ -18,11 +18,12 @@ public class TirerDegagement extends CommandBase {
    * Creates a new TirerDegagement.
    */
   public TirerDegagement(Lanceur lanceur, Convoyeur convoyeur) {
-    addRequirements(requirements);
+    //addRequirements(requirements);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
+  
   @Override
   public void initialize() {
   }

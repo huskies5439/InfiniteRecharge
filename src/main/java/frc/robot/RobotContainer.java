@@ -53,7 +53,7 @@ public class RobotContainer {
   private final Limelight limelight = new Limelight();
   private final Tourelle tourelle = new Tourelle();
   private final Grimpeur grimpeur = new Grimpeur();
-  private final Convoyeur convoyeur = new Convoyeur();
+  private final Convoyeur convoyeur = new Convoyeur(); 
   Trajectory exampleTrajectory = null;
   
   
@@ -74,7 +74,7 @@ public class RobotContainer {
    new JoystickButton(pilote, Button.kBumperRight.value).whileHeld(new Gober(gobeur));
 
    new JoystickButton(pilote, Button.kStart.value).whenPressed(new BarrerGrimpeur(grimpeur));
-   
+ 
    new JoystickButton(pilote, Button.kBack.value).whenPressed(new ResetGrimpeur(()->(pilote.getY(GenericHID.Hand.kLeft)),grimpeur));
 
    new JoystickButton(pilote, Button.kY.value).toggleWhenPressed(new Lancer(lanceur,limelight));
@@ -85,9 +85,9 @@ public class RobotContainer {
    //new JoystickButton(pilote, Button.kA.value).whileHeld(new TourelleAuto(tourelle,limelight));
    //new JoystickButton(pilote, Button.kB.value).whenPressed(new InstantCommand(transmission::basseVitesse,transmission));
    //new JoystickButton(pilote, Button.kX.value).whenPressed(new InstantCommand(transmission::hauteVitesse,transmission));
-   }
+    }
  
-  public Command getAutonomousCommand() {
+  /*public Command getAutonomousCommand() {
      var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(new SimpleMotorFeedforward(0.25, 1.95, 0.312),
         Constants.kinematics, 5); // 0.25, 1.95, 0.312
 
@@ -122,6 +122,6 @@ public class RobotContainer {
       return ramseteCommand.andThen(() -> 
       basePilotable.tankDriveVolts(0, 0)).beforeStarting(()-> basePilotable.resetOdometrie(new Pose2d()));
       //return new RunCommand(()->basePilotable.tankDriveVolts(-1, 1));
-   }
+   }*/
 }
 

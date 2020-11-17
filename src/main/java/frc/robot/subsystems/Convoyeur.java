@@ -16,11 +16,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Convoyeur extends SubsystemBase {
-  private CANSparkMax moteurConvoyeur1 = new CANSparkMax(1, MotorType.kBrushless);
-  private CANSparkMax moteurConvoyeur2 = new CANSparkMax(2, MotorType.kBrushless);
+  private CANSparkMax moteurConvoyeur1 = new CANSparkMax(35, MotorType.kBrushless);
+  private CANSparkMax moteurConvoyeur2 = new CANSparkMax(36, MotorType.kBrushless);
   private SpeedControllerGroup convoyeur = new SpeedControllerGroup(moteurConvoyeur1, moteurConvoyeur2);
-  private DigitalInput entree = new DigitalInput(1);
-  private DigitalInput sortie = new DigitalInput(2);
+  private DigitalInput entree = new DigitalInput(8);
+  private DigitalInput sortie = new DigitalInput(9);
 
   /**
    * Creates a new Convoyeur.

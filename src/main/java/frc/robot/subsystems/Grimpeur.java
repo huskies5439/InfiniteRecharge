@@ -20,12 +20,12 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Grimpeur extends SubsystemBase {
-  private CANSparkMax grimpeur1 = new CANSparkMax(0, MotorType.kBrushless);
-  private CANSparkMax grimpeur2 = new CANSparkMax(0, MotorType.kBrushless);
+  private CANSparkMax grimpeur1 = new CANSparkMax(37, MotorType.kBrushless);
+  private CANSparkMax grimpeur2 = new CANSparkMax(29, MotorType.kBrushless);
   private SpeedControllerGroup grimpeur = new SpeedControllerGroup(grimpeur1, grimpeur2);
-  private Servo servo = new Servo(0);
-  private DoubleSolenoid bras = new DoubleSolenoid(0, 1);
-  WPI_TalonSRX bougeur = new WPI_TalonSRX(0);
+  private Servo servo = new Servo(5);//À valider le branchemebnt
+  private DoubleSolenoid bras = new DoubleSolenoid(4, 5);
+  WPI_TalonSRX bougeur = new WPI_TalonSRX(15);
     /**
    * Creates a new Grimpeur.
    */

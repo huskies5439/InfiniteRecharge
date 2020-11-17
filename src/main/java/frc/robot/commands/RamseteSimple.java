@@ -22,6 +22,7 @@ public class RamseteSimple extends RamseteCommand {
   /**
    * Creates a new RamseteSimple.
    */
+  
   public RamseteSimple(Trajectory trajectoire, BasePilotable basePilotable) {
     super(trajectoire, 
     basePilotable::getPose,
