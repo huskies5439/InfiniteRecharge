@@ -66,7 +66,7 @@ public class RobotContainer {
     basePilotable.setDefaultCommand(new RunCommand(()-> basePilotable.conduire(1.0*pilote.getY(GenericHID.Hand.kLeft), 0.7*pilote.getX(GenericHID.Hand.kRight)),basePilotable));
     tourelle.setDefaultCommand(new TourelleManuelle(()->(pilote.getTriggerAxis(Hand.kRight)-pilote.getTriggerAxis(Hand.kLeft))*-0.25, tourelle));//moins parce que maths
     transmission.setDefaultCommand(new ChangementVitesse(basePilotable, transmission));
-    convoyeur.setDefaultCommand(new RunCommand(convoyeur::indexer, convoyeur));
+    //convoyeur.setDefaultCommand(new RunCommand(convoyeur::indexer, convoyeur));
   }                               
 
    private void configureButtonBindings(){
@@ -85,7 +85,10 @@ public class RobotContainer {
    //new JoystickButton(pilote, Button.kA.value).whileHeld(new TourelleAuto(tourelle,limelight));
    //new JoystickButton(pilote, Button.kB.value).whenPressed(new InstantCommand(transmission::basseVitesse,transmission));
    //new JoystickButton(pilote, Button.kX.value).whenPressed(new InstantCommand(transmission::hauteVitesse,transmission));
-    }
+   new JoystickButton(pilote, Button.kB.value).whenPressed(new InstantCommand(convoyeur::fournirBalle,convoyeur).andThen(new InstantCommand(convoyeur::stop,convoyeur)));
+
+  
+  }
  
   /*public Command getAutonomousCommand() {
      var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(new SimpleMotorFeedforward(0.25, 1.95, 0.312),
