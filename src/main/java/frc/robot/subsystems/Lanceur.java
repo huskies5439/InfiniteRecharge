@@ -52,6 +52,8 @@ public class Lanceur extends SubsystemBase {
     return pid.atSetpoint();
   }
 
+
+  
   public void setVitesse(double voltage) {
     moteurLanceur.setVoltage(voltage);
   
