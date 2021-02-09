@@ -23,18 +23,15 @@ import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
-import frc.robot.commands.BarrerGrimpeur;
 import frc.robot.commands.ChangementVitesse;
 import frc.robot.commands.Gober;
 import frc.robot.commands.Lancer;
-import frc.robot.commands.ResetGrimpeur;
 import frc.robot.commands.SequenceViserLancer;
 import frc.robot.commands.TourelleAuto;
 import frc.robot.commands.TourelleManuelle;
 import frc.robot.subsystems.BasePilotable;
 import frc.robot.subsystems.Convoyeur;
 import frc.robot.subsystems.Gobeur;
-import frc.robot.subsystems.Grimpeur;
 import frc.robot.subsystems.Lanceur;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Tourelle;
@@ -52,7 +49,6 @@ public class RobotContainer {
   private final Transmission transmission = new Transmission();
   private final Limelight limelight = new Limelight();
   private final Tourelle tourelle = new Tourelle();
-  private final Grimpeur grimpeur = new Grimpeur();
   private final Convoyeur convoyeur = new Convoyeur(); 
   Trajectory exampleTrajectory = null;
   
@@ -72,10 +68,6 @@ public class RobotContainer {
    private void configureButtonBindings(){
 
    new JoystickButton(pilote, Button.kBumperRight.value).whileHeld(new Gober(gobeur));
-
-   new JoystickButton(pilote, Button.kStart.value).whenPressed(new BarrerGrimpeur(grimpeur));
- 
-   new JoystickButton(pilote, Button.kBack.value).whenPressed(new ResetGrimpeur(()->(pilote.getY(GenericHID.Hand.kLeft)),grimpeur));
 
    new JoystickButton(pilote, Button.kY.value).toggleWhenPressed(new Lancer(lanceur,limelight));
     //Tir manuelle pour dégager les ballons.(Coplilote, valider bouton)
