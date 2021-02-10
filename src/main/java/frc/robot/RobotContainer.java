@@ -9,6 +9,7 @@ package frc.robot;
 
 import java.util.List;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
@@ -43,13 +44,14 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class RobotContainer {
-  private final BasePilotable basePilotable = new BasePilotable();
-  private final Lanceur lanceur = new Lanceur();
-  private final Gobeur gobeur = new Gobeur();
-  private final Transmission transmission = new Transmission();
-  private final Limelight limelight = new Limelight();
-  private final Tourelle tourelle = new Tourelle();
-  private final Convoyeur convoyeur = new Convoyeur(); 
+   private final BasePilotable basePilotable = new BasePilotable();
+   private final Lanceur lanceur = new Lanceur();
+   private final Gobeur gobeur = new Gobeur();
+   private final Transmission transmission = new Transmission();
+   private final Limelight limelight = new Limelight();
+   private final Tourelle tourelle = new Tourelle();
+  private final Convoyeur convoyeur = new Convoyeur();
+  private final Compressor compressor = new Compressor(); 
   Trajectory exampleTrajectory = null;
   
   
@@ -63,6 +65,7 @@ public class RobotContainer {
     tourelle.setDefaultCommand(new TourelleManuelle(()->(pilote.getTriggerAxis(Hand.kRight)-pilote.getTriggerAxis(Hand.kLeft))*-0.25, tourelle));//moins parce que maths
     transmission.setDefaultCommand(new ChangementVitesse(basePilotable, transmission));
     //convoyeur.setDefaultCommand(new RunCommand(convoyeur::indexer, convoyeur));
+   compressor.stop();
   }                               
 
    private void configureButtonBindings(){
