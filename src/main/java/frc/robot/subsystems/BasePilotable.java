@@ -51,7 +51,8 @@ public class BasePilotable extends SubsystemBase {
   public BasePilotable() {
     resetEncodeur();
     resetGyro();
-    conversionEncodeur=Math.PI*0.1846/(256*3*2.5); //roue de 18.46 cm déterminé manuellement, ratio 2.5:1 shaft-roue 3:1 encodeur-shaft encodeur 256 clic encodeur 
+    //conversionEncodeur=Math.PI*0.1846/(256*3*2.5); //roue de 18.46 cm déterminé manuellement, ratio 2.5:1 shaft-roue 3:1 encodeur-shaft encodeur 256 clic encodeur 
+    conversionEncodeur=Math.PI*0.1846/970;//valeur empirique qui marche ben
     setRamp(0.25);
     encodeurg.setDistancePerPulse(conversionEncodeur);
     encodeurd.setDistancePerPulse(conversionEncodeur);

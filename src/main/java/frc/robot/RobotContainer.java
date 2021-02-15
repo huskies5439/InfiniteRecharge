@@ -73,10 +73,9 @@ public class RobotContainer {
    new JoystickButton(pilote, Button.kBumperRight.value).whileHeld(new Gober(gobeur));
 
    new JoystickButton(pilote, Button.kY.value).toggleWhenPressed(new Lancer(lanceur,limelight));
-    //Tir manuelle pour dégager les ballons.(Coplilote, valider bouton)
    new JoystickButton(pilote, Button.kBumperLeft.value).whileHeld(new RunCommand(()->lanceur.setVitesse(11), lanceur).andThen(new InstantCommand(lanceur::stop)));
   
-   new JoystickButton(pilote, Button.kA.value).whenPressed(new SequenceViserLancer(tourelle, lanceur, limelight, convoyeur));
+  // new JoystickButton(pilote, Button.kA.value).whenPressed(new SequenceViserLancer(tourelle, lanceur, limelight, convoyeur));
    //new JoystickButton(pilote, Button.kA.value).whileHeld(new TourelleAuto(tourelle,limelight));
    //new JoystickButton(pilote, Button.kB.value).whenPressed(new InstantCommand(transmission::basseVitesse,transmission));
    //new JoystickButton(pilote, Button.kX.value).whenPressed(new InstantCommand(transmission::hauteVitesse,transmission));
@@ -85,7 +84,7 @@ public class RobotContainer {
   
   }
  
-  /*public Command getAutonomousCommand() {
+  public Command getAutonomousCommand() {
      var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(new SimpleMotorFeedforward(0.25, 1.95, 0.312),
         Constants.kinematics, 5); // 0.25, 1.95, 0.312
 
@@ -112,14 +111,14 @@ public class RobotContainer {
       new SimpleMotorFeedforward(0.25, 1.95, 0 ),
       Constants.kinematics,
       basePilotable::getWheelSpeeds, 
-      new PIDController(0, 0, 0), 
-      new PIDController(0, 0, 0), // 12.2
+      new PIDController(8.92, 0, 0), 
+      new PIDController(8.92, 0, 0), // 12.2
       // RamseteCommand passes volts to the callback
       basePilotable::tankDriveVolts, basePilotable);// 8.92
 
       return ramseteCommand.andThen(() -> 
       basePilotable.tankDriveVolts(0, 0)).beforeStarting(()-> basePilotable.resetOdometrie(new Pose2d()));
-      //return new RunCommand(()->basePilotable.tankDriveVolts(-1, 1));
-   }*/
+      //return new RunCommand(()->basePilotable.tankDriveVolts(5, 5));
+   }
 }
 
