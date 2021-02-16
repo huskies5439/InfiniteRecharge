@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Gobeur extends SubsystemBase {
-  private DoubleSolenoid tiroir = new DoubleSolenoid(2, 3);
+  private DoubleSolenoid tiroir = new DoubleSolenoid(4, 5);
   private CANSparkMax rouleau = new CANSparkMax(26, MotorType.kBrushless);
 
   public Gobeur() {

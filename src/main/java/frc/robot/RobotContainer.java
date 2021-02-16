@@ -65,7 +65,6 @@ public class RobotContainer {
     tourelle.setDefaultCommand(new TourelleManuelle(()->(pilote.getTriggerAxis(Hand.kRight)-pilote.getTriggerAxis(Hand.kLeft))*-0.25, tourelle));//moins parce que maths
     transmission.setDefaultCommand(new ChangementVitesse(basePilotable, transmission));
     //convoyeur.setDefaultCommand(new RunCommand(convoyeur::indexer, convoyeur));
-   compressor.stop();
   }                               
 
    private void configureButtonBindings(){
