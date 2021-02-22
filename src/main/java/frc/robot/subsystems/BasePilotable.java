@@ -53,7 +53,8 @@ public class BasePilotable extends SubsystemBase {
     resetGyro();
     //conversionEncodeur=Math.PI*0.1846/(256*3*2.5); //roue de 18.46 cm déterminé manuellement, ratio 2.5:1 shaft-roue 3:1 encodeur-shaft encodeur 256 clic encodeur 
     conversionEncodeur=Math.PI*0.1846/970;//valeur empirique qui marche ben
-    setRamp(0.25);
+    
+    setRamp(0);
     encodeurg.setDistancePerPulse(conversionEncodeur);
     encodeurd.setDistancePerPulse(conversionEncodeur);
     setNeutralMode(IdleMode.kCoast);
@@ -94,7 +95,7 @@ public class BasePilotable extends SubsystemBase {
   }
   
   public double getNeoEncoder(){
-    return neog1.getEncoder().getPosition();
+    return -neog1.getEncoder().getPosition();
   }
   public double getPositionD() {
     return encodeurd.getDistance();
@@ -111,6 +112,7 @@ public class BasePilotable extends SubsystemBase {
   public void resetEncodeur() {
     encodeurd.reset();
     encodeurg.reset();
+    neog1.getEncoder().setPosition(0);
   }
   public double getVitesseD() {
     return encodeurd.getRate();
