@@ -22,4 +22,12 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 public final class Constants {
     public static final DifferentialDriveKinematics kinematics =
     new DifferentialDriveKinematics(0.6);
+    public static final double kS = 0.126;
+    public static final double kV = 4.44;
+    public static final double kPRamsete = 5;
+
+    public static final double maxVitesse = 1.5;
+    public static final double maxAcceleration = 0.75;
 }
+//Vieux KS -> 0,25 KV -> 1,95 KA-> 0.312
+//Nouveau KS-> 0,126 KV -> 4,4

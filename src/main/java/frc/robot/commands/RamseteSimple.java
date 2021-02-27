@@ -27,12 +27,12 @@ public class RamseteSimple extends RamseteCommand {
     super(trajectoire, 
     basePilotable::getPose,
     new RamseteController(2, 0.7), 
-    new SimpleMotorFeedforward(0.25, 1.95, 0 ),
+    new SimpleMotorFeedforward(Constants.kS,Constants.kV, 0 ),
     Constants.kinematics,
     basePilotable::getWheelSpeeds, 
-    new PIDController(0, 0, 0), 
-    new PIDController(0, 0, 0), // 12.2
+    new PIDController(Constants.kPRamsete, 0, 0), 
+    new PIDController(Constants.kPRamsete, 0, 0),
     // RamseteCommand passes volts to the callback
-    basePilotable::tankDriveVolts, basePilotable);// 8.92
+    basePilotable::tankDriveVolts, basePilotable);
   }
 }

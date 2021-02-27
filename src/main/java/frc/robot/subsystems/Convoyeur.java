@@ -7,14 +7,11 @@
 
 package frc.robot.subsystems;
 
-import java.nio.IntBuffer;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.Ultrasonic;
@@ -27,22 +24,26 @@ public class Convoyeur extends SubsystemBase {
   private SpeedControllerGroup convoyeur = new SpeedControllerGroup(moteurConvoyeur1, moteurConvoyeur2);
   private I2C.Port i2cport = I2C.Port.kOnboard;
   private ColorSensorV3 colorsensor = new ColorSensorV3(i2cport);
-  private AnalogInput sharpe = new AnalogInput(0);
+  private Ultrasonic ultrasonic = new Ultrasonic(8,9);
   /**
    * Creates a new Convoyeur.
    */
   public Convoyeur() {
     moteurConvoyeur1.setInverted(true);
+    Ultrasonic.setAutomaticMode(true);
   }
 
   @Override
   public void periodic() {
     SmartDashboard.putNumber("vert", couleur());
-    SmartDashboard.putNumber("Sharpe", distanceSharpe());
+    SmartDashboard.putNumber("Ultrasonic", getUltrasonicRange());
   }
 
   public void fournirBalle() {
     convoyeur.set(0.75);
+  }
+  public void sortirBalle(){
+    convoyeur.set(-0.75);
   }
 //les capteurs sont true lorsque détecte pas
   public void indexer() {
@@ -61,16 +62,17 @@ public class Convoyeur extends SubsystemBase {
     return colorsensor.getGreen();
   }
 
-  public int distanceSharpe(){
-    return sharpe.getValue();
-  }
-
   boolean entree(){
     return couleur()>350;
   }
 
   boolean sortie(){
-    return distanceSharpe()<1500;
+    return getUltrasonicRange()>75;
+  }
+
+  public double getUltrasonicRange()
+  {
+    return ultrasonic.getRangeMM();
   }
 
  

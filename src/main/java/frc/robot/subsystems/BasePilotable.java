@@ -12,7 +12,10 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import org.xml.sax.InputSource;
+
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
@@ -43,6 +46,8 @@ public class BasePilotable extends SubsystemBase {
 
   private DifferentialDriveOdometry odometrie;
 
+  private boolean changementRampe = false;
+
   
   
     //Creates a new ExampleSubsystem.
@@ -51,8 +56,7 @@ public class BasePilotable extends SubsystemBase {
   public BasePilotable() {
     resetEncodeur();
     resetGyro();
-    //conversionEncodeur=Math.PI*0.1846/(256*3*2.5); //roue de 18.46 cm déterminé manuellement, ratio 2.5:1 shaft-roue 3:1 encodeur-shaft encodeur 256 clic encodeur 
-    conversionEncodeur=Math.PI*0.1846/970;//valeur empirique qui marche ben
+    conversionEncodeur=Math.PI*0.1865/(256*3*2.5); //roue de 18.46 cm déterminé manuellement, ratio 2.5:1 shaft-roue 3:1 encodeur-shaft encodeur 256 clic encodeur 
     
     setRamp(0);
     encodeurg.setDistancePerPulse(conversionEncodeur);
@@ -70,9 +74,18 @@ public class BasePilotable extends SubsystemBase {
     //SmartDashboard.putNumber("VitesseG", getVitesseG());
     //SmartDashboard.putNumber("VitesseD", getVitesseD());
     SmartDashboard.putNumber("Vitesse Moyenne", getVitesse());
+    SmartDashboard.putNumber("Position Gauche", getPositionG());
+    SmartDashboard.putNumber("Position Droite", getPositionD());
     SmartDashboard.putNumber("Position Moyenne", getPositionMoyenne());
     SmartDashboard.putNumber("NeoEncoder", getNeoEncoder());
     SmartDashboard.putNumber("Gyro", getAngle());
+    SmartDashboard.putNumber("vitesse",getVitesse());
+
+    //Changement de du ramp sur les NEO entre le mode autonome et téléop
+    if (!changementRampe && RobotState.isOperatorControl()){
+      setRamp(1);
+      changementRampe = true;
+    }
 
   }
 

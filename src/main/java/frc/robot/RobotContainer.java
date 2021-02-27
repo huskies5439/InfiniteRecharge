@@ -28,6 +28,7 @@ import frc.robot.commands.ChangementVitesse;
 import frc.robot.commands.FournirBalle;
 import frc.robot.commands.Gober;
 import frc.robot.commands.Lancer;
+import frc.robot.commands.RamseteSimple;
 import frc.robot.commands.SequenceViserLancer;
 import frc.robot.commands.TourelleAuto;
 import frc.robot.commands.TourelleManuelle;
@@ -85,40 +86,31 @@ public class RobotContainer {
   }
  
   public Command getAutonomousCommand() {
-     var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(new SimpleMotorFeedforward(0.25, 1.95, 0.312),
-        Constants.kinematics, 5); // 0.25, 1.95, 0.312
+     var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(new SimpleMotorFeedforward(Constants.kS, Constants.kV, 0),
+        Constants.kinematics, 10); // 0.25, 1.95, 0.312
 
-    TrajectoryConfig config = new TrajectoryConfig(1, 0.5)// max speed, max acceleration
+    TrajectoryConfig config = new TrajectoryConfig(Constants.maxVitesse, Constants.maxAcceleration)// max speed, max acceleration
         // Add kinematics to ensure max speed is actually obeyed
         .setKinematics(Constants.kinematics)
         // Apply the voltage constraint
         .addConstraint(autoVoltageConstraint);
+
         exampleTrajectory = TrajectoryGenerator.generateTrajectory(
           // Start at the origin facing the +X direction
           new Pose2d(0, 0, new Rotation2d(0)),
           // Pass through these two interior waypoints, making an 's' curve path
           List.of(
-              new Translation2d(1, 1),
-              new Translation2d(2, -1)
+              new Translation2d(2, 1),
+              new Translation2d(4, -1)
           ),
           // End 3 meters straight ahead of where we started, facing forward
-          new Pose2d(3, 0, new Rotation2d(0)),
+          new Pose2d(6, 0, new Rotation2d(0)),
           // Pass config
           config
       );
-      RamseteCommand ramseteCommand = new RamseteCommand(exampleTrajectory, basePilotable::getPose,
-      new RamseteController(2, 0.7), 
-      new SimpleMotorFeedforward(0.25, 1.95, 0 ),
-      Constants.kinematics,
-      basePilotable::getWheelSpeeds, 
-      new PIDController(8.92, 0, 0), 
-      new PIDController(8.92, 0, 0), // 12.2
-      // RamseteCommand passes volts to the callback
-      basePilotable::tankDriveVolts, basePilotable);// 8.92
 
-     // return ramseteCommand.andThen(() -> 
-      //basePilotable.tankDriveVolts(0, 0)).beforeStarting(()-> basePilotable.resetOdometrie(new Pose2d()));
-      return new RunCommand(()->basePilotable.tankDriveVolts(5, 5));
+      return new RamseteSimple(exampleTrajectory, basePilotable);
+     // return new RunCommand(()->basePilotable.tankDriveVolts(4.38,4.38), basePilotable);
    }
 }
 
