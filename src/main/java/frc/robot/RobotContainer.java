@@ -7,9 +7,12 @@
 
 package frc.robot;
 
+import java.io.IOException;
 import java.util.List;
 
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
@@ -23,6 +26,7 @@ import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import frc.robot.commands.ChangementVitesse;
 import frc.robot.commands.FournirBalle;
@@ -67,6 +71,7 @@ public class RobotContainer {
     tourelle.setDefaultCommand(new TourelleManuelle(()->(pilote.getTriggerAxis(Hand.kRight)-pilote.getTriggerAxis(Hand.kLeft))*-0.25, tourelle));//moins parce que maths
     transmission.setDefaultCommand(new ChangementVitesse(basePilotable, transmission));
     convoyeur.setDefaultCommand(new RunCommand(convoyeur::indexer, convoyeur));
+  
   }                               
 
    private void configureButtonBindings(){
@@ -89,13 +94,31 @@ public class RobotContainer {
      var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(new SimpleMotorFeedforward(Constants.kS, Constants.kV, 0),
         Constants.kinematics, 10); // 0.25, 1.95, 0.312
 
-    TrajectoryConfig config = new TrajectoryConfig(Constants.maxVitesse, Constants.maxAcceleration)// max speed, max acceleration
+    /*TrajectoryConfig config = new TrajectoryConfig(Constants.maxVitesse, Constants.maxAcceleration)// max speed, max acceleration
         // Add kinematics to ensure max speed is actually obeyed
         .setKinematics(Constants.kinematics)
         // Apply the voltage constraint
-        .addConstraint(autoVoltageConstraint);
+        .addConstraint(autoVoltageConstraint);*/
 
-        exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+        String trajectoryJSON = "output/BarrelRacing.wpilib.json";
+        try
+        {
+         var path = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+         DriverStation.reportWarning("Path : " + path,false);
+         exampleTrajectory = TrajectoryUtil.fromPathweaverJson(path);
+         /*var transform = basePilotable.getPose().minus(exampleTrajectory.getInitialPose());
+         exampleTrajectory= exampleTrajectory.transformBy(transform);*/
+         
+        } 
+        catch (IOException e)
+        {
+           DriverStation.reportError("Unable to open trajectory : " + trajectoryJSON, e.getStackTrace());
+  
+        
+        }
+
+
+        /*exampleTrajectory = TrajectoryGenerator.generateTrajectory(
           // Start at the origin facing the +X direction
           new Pose2d(0, 0, new Rotation2d(0)),
           // Pass through these two interior waypoints, making an 's' curve path
@@ -107,8 +130,8 @@ public class RobotContainer {
           new Pose2d(6, 0, new Rotation2d(0)),
           // Pass config
           config
-      );
-
+      );*/
+      basePilotable.resetOdometrie(exampleTrajectory.getInitialPose());
       return new RamseteSimple(exampleTrajectory, basePilotable);
      // return new RunCommand(()->basePilotable.tankDriveVolts(4.38,4.38), basePilotable);
    }

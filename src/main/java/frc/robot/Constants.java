@@ -24,7 +24,7 @@ public final class Constants {
     new DifferentialDriveKinematics(0.6);
     public static final double kS = 0.126;
     public static final double kV = 4.44;
-    public static final double kPRamsete = 5;
+    public static final double kPRamsete = 5.0;
 
     public static final double maxVitesse = 1.5;
     public static final double maxAcceleration = 0.75;
