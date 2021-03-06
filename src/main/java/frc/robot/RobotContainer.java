@@ -23,6 +23,8 @@ import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
@@ -56,10 +58,10 @@ public class RobotContainer {
    private final Transmission transmission = new Transmission();
    private final Limelight limelight = new Limelight();
    private final Tourelle tourelle = new Tourelle();
-  private final Convoyeur convoyeur = new Convoyeur();
-  private final Compressor compressor = new Compressor(); 
-  Trajectory exampleTrajectory = null;
-  
+   private final Convoyeur convoyeur = new Convoyeur();
+   private final Compressor compressor = new Compressor(); 
+   Trajectory exampleTrajectory = null;
+   private SendableChooser<String> chooser = new SendableChooser<>();
   
   XboxController pilote = new XboxController(0);
   //XboxController copilote = new XboxController(1);
@@ -71,7 +73,12 @@ public class RobotContainer {
     tourelle.setDefaultCommand(new TourelleManuelle(()->(pilote.getTriggerAxis(Hand.kRight)-pilote.getTriggerAxis(Hand.kLeft))*-0.25, tourelle));//moins parce que maths
     transmission.setDefaultCommand(new ChangementVitesse(basePilotable, transmission));
     convoyeur.setDefaultCommand(new RunCommand(convoyeur::indexer, convoyeur));
-  
+    chooser.setDefaultOption("Test", "Test");
+    chooser.addOption("BarrelRacing", "BarrelRacing");
+    chooser.addOption("Slalom", "Slalom");
+    chooser.addOption("Bounce", "Bounce");
+    SmartDashboard.putData("Auto Mode", chooser);
+
   }                               
 
    private void configureButtonBindings(){
@@ -91,8 +98,14 @@ public class RobotContainer {
   }
  
   public Command getAutonomousCommand() {
-     var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(new SimpleMotorFeedforward(Constants.kS, Constants.kV, 0),
-        Constants.kinematics, 10); // 0.25, 1.95, 0.312
+
+
+   String trajet = chooser.getSelected();
+
+
+  
+     //var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(new SimpleMotorFeedforward(Constants.kS, Constants.kV, 0),
+        //Constants.kinematics, 10); // 0.25, 1.95, 0.312
 
     /*TrajectoryConfig config = new TrajectoryConfig(Constants.maxVitesse, Constants.maxAcceleration)// max speed, max acceleration
         // Add kinematics to ensure max speed is actually obeyed
@@ -100,7 +113,7 @@ public class RobotContainer {
         // Apply the voltage constraint
         .addConstraint(autoVoltageConstraint);*/
 
-        String trajectoryJSON = "output/BarrelRacing.wpilib.json";
+        String trajectoryJSON = "output/"+trajet+".wpilib.json";
         try
         {
          var path = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
@@ -117,7 +130,6 @@ public class RobotContainer {
         
         }
 
-
         /*exampleTrajectory = TrajectoryGenerator.generateTrajectory(
           // Start at the origin facing the +X direction
           new Pose2d(0, 0, new Rotation2d(0)),
@@ -133,7 +145,8 @@ public class RobotContainer {
       );*/
       basePilotable.resetOdometrie(exampleTrajectory.getInitialPose());
       return new RamseteSimple(exampleTrajectory, basePilotable);
-     // return new RunCommand(()->basePilotable.tankDriveVolts(4.38,4.38), basePilotable);
+     
+      // return new RunCommand(()->basePilotable.tankDriveVolts(4.38,4.38), basePilotable);
    }
 }
 
