@@ -84,7 +84,7 @@ public class BasePilotable extends SubsystemBase {
   }
 
   public void conduire(double vx, double vz) {
-    drive.arcadeDrive(-vx, vz);
+    drive.arcadeDrive(-vx, 0.7*vz);
   }
 
   public void setRamp(double ramp) {
