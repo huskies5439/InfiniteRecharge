@@ -12,8 +12,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import org.xml.sax.InputSource;
-
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
@@ -72,13 +70,8 @@ public class BasePilotable extends SubsystemBase {
     //TODO Clean up du dashboard : j'oterais NeoEncodeur, Position Gauche et droite, Vitesse gauche et droite
     odometrie.update(Rotation2d.fromDegrees(getAngle()), getPositionG(), getPositionD());
     SmartDashboard.putNumberArray("odometrie", getOdometry());
-    //SmartDashboard.putNumber("VitesseG", getVitesseG());
-    //SmartDashboard.putNumber("VitesseD", getVitesseD());
     SmartDashboard.putNumber("Vitesse Moyenne", getVitesse());
-    SmartDashboard.putNumber("Position Gauche", getPositionG());
-    SmartDashboard.putNumber("Position Droite", getPositionD());
     SmartDashboard.putNumber("Position Moyenne", getPositionMoyenne());
-    SmartDashboard.putNumber("NeoEncoder", getNeoEncoder());
     SmartDashboard.putNumber("Gyro", getAngle());
     SmartDashboard.putNumber("vitesse",getVitesse());
 
