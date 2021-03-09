@@ -19,6 +19,8 @@ public class Lancer extends CommandBase {
   Limelight limelight;
   double ta;
   double vCible;
+  //TODO flush ce qui touche au Shuffleboard
+  //TODO la vitesse est un calcul avec le Ta (mettre genre Ta*100 avec un commentaire comme de quoi on va le calibrer), clean-up des autres façon de donner vcible
 /*
   //Donne vitesse a partir ShuffleBoard
   private ShuffleboardTab tab = Shuffleboard.getTab("calibration");

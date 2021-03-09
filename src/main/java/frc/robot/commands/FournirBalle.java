@@ -12,6 +12,14 @@ import frc.robot.subsystems.Convoyeur;
 import frc.robot.subsystems.Lanceur;
 import frc.robot.subsystems.Tourelle;
 
+//TODO : Créer deux versions de la commande :
+/*FournirBalleSimple : necessite juste le convoyeur, n'utilise pas de conditions dans le execute
+et va être utiliser dans SéquenceLancer
+
+FournirBalleAvecCondition : utilise les deux conditions dans le execute, nécessite les 3 sous systèmes, va
+être utiliser dans séquenceViserLancer
+*/
+
 public class FournirBalle extends CommandBase {
   //fournir les balles au lanceur à l'aide du convoyeur
   Convoyeur convoyeur;
@@ -37,6 +45,7 @@ public class FournirBalle extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+  
     /*if(tourelle.estCentre()&& lanceur.estBonneVitesse()){
     convoyeur.fournirBalle();
       

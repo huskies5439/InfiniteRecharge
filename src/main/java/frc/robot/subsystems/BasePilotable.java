@@ -69,6 +69,7 @@ public class BasePilotable extends SubsystemBase {
 
   @Override
   public void periodic() {
+    //TODO Clean up du dashboard : j'oterais NeoEncodeur, Position Gauche et droite, Vitesse gauche et droite
     odometrie.update(Rotation2d.fromDegrees(getAngle()), getPositionG(), getPositionD());
     SmartDashboard.putNumberArray("odometrie", getOdometry());
     //SmartDashboard.putNumber("VitesseG", getVitesseG());
@@ -107,7 +108,7 @@ public class BasePilotable extends SubsystemBase {
     neod2.setIdleMode(mode);
   }
   
-  public double getNeoEncoder(){
+  public double getNeoEncoder(){//Pour test
     return -neog1.getEncoder().getPosition();
   }
   public double getPositionD() {
@@ -145,7 +146,7 @@ public class BasePilotable extends SubsystemBase {
   
   public void resetGyro() {
     gyro.setYaw(0);
-    //gyro.setFusedHeading(0); Copier depuis trajectory-betabot. Utile ???
+    
   }
   
   public double[] getOdometry(){
@@ -182,7 +183,7 @@ public class BasePilotable extends SubsystemBase {
   }
  
 
- 
+ //À garder pour GalacticSearch
 /*
   public double getTurnRate() {
     gyro.getRawGyro(ypr_dps);

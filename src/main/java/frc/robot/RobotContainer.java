@@ -5,6 +5,9 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+//TODO : Clean-up de tous les imports inutiles
+
+
 package frc.robot;
 
 import java.io.IOException;
@@ -64,15 +67,19 @@ public class RobotContainer {
    private SendableChooser<String> chooser = new SendableChooser<>();
   
   XboxController pilote = new XboxController(0);
-  //XboxController copilote = new XboxController(1);
+  //XboxController copilote = new XboxController(1); //TODO : supprimer ???
 
  
   public RobotContainer() {
     configureButtonBindings();
+   
+   //TODO les coefficient pour conduire devrait être dans la méthode du sous système
     basePilotable.setDefaultCommand(new RunCommand(()-> basePilotable.conduire(1.0*pilote.getY(GenericHID.Hand.kLeft), 0.7*pilote.getX(GenericHID.Hand.kRight)),basePilotable));
     tourelle.setDefaultCommand(new TourelleManuelle(()->(pilote.getTriggerAxis(Hand.kRight)-pilote.getTriggerAxis(Hand.kLeft))*-0.25, tourelle));//moins parce que maths
     transmission.setDefaultCommand(new ChangementVitesse(basePilotable, transmission));
     convoyeur.setDefaultCommand(new RunCommand(convoyeur::indexer, convoyeur));
+    
+    
     chooser.setDefaultOption("Test", "Test");
     chooser.addOption("BarrelRacing", "BarrelRacing");
     chooser.addOption("Slalom", "Slalom");
@@ -85,21 +92,33 @@ public class RobotContainer {
 
    new JoystickButton(pilote, Button.kBumperRight.value).whileHeld(new Gober(gobeur));
 
-   new JoystickButton(pilote, Button.kY.value).toggleWhenPressed(new Lancer(lanceur,limelight));
+   //TODO : À ôter lorsque les 2 séquences vont être ok
+   new JoystickButton(pilote, Button.kY.value).toggleWhenPressed(new Lancer(lanceur,limelight)); 
+
+   // TODO Remplacer par séquenceLancer (pas viser). Changer le bouton. Changer en toggle ??
    new JoystickButton(pilote, Button.kBumperLeft.value).whileHeld(new RunCommand(()->lanceur.setVitesse(11), lanceur).andThen(new InstantCommand(lanceur::stop)));
   
+   //TODO : Vérifier le fonctionnement 
   // new JoystickButton(pilote, Button.kA.value).whenPressed(new SequenceViserLancer(tourelle, lanceur, limelight, convoyeur));
-   //new JoystickButton(pilote, Button.kA.value).whileHeld(new TourelleAuto(tourelle,limelight));
+   
+  //TODO : Oter quand séquenceviser lancer va être ok
+  new JoystickButton(pilote, Button.kA.value).whileHeld(new TourelleAuto(tourelle,limelight));
+
+  //TODO Flush
    //new JoystickButton(pilote, Button.kB.value).whenPressed(new InstantCommand(transmission::basseVitesse,transmission));
    //new JoystickButton(pilote, Button.kX.value).whenPressed(new InstantCommand(transmission::hauteVitesse,transmission));
+   
+   //TODO : Oter quand séquenceLancer (pas viser) va être ok
    new JoystickButton(pilote, Button.kB.value).whileHeld(new FournirBalle(convoyeur, tourelle, lanceur));
 
   
   }
  
   public Command getAutonomousCommand() {
+     //Présementement ne permet seulement que autoNav
 
-
+//TODO ôter tous les commentaires
+//TODO Renommer exampleTrajectory par autonomousTrajectory
    String trajet = chooser.getSelected();
 
 

@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Convoyeur;
 import frc.robot.subsystems.Lanceur;
 
+//TODO Renommer SéquenceLancer, mettre le lanceur à genre 11V, attendre genre 1 sec, partir le fournirballesimple
+
 public class TirerDegagement extends CommandBase {
   Lanceur lanceur;
   Convoyeur convoyeur;
