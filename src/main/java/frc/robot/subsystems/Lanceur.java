@@ -39,6 +39,7 @@ public class Lanceur extends SubsystemBase {
   @Override
   public void periodic() {
    SmartDashboard.putNumber("vitesse lanceur", getVitesse());
+   SmartDashboard.putBoolean("Bonne vitesse", estBonneVitesse());
    //SmartDashboard.putNumber("Position lanceur", getPosition());
   }
   public void setConversionFactors(double facteur){

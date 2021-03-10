@@ -7,7 +7,6 @@
 
 //TODO : Clean-up de tous les imports inutiles
 
-
 package frc.robot;
 
 import java.io.IOException;
@@ -23,10 +22,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import frc.robot.commands.ChangementVitesse;
-import frc.robot.commands.FournirBalle;
+import frc.robot.commands.FournirBalleSimple;
 import frc.robot.commands.Gober;
-import frc.robot.commands.Lancer;
+import frc.robot.commands.LancerAvecCible;
 import frc.robot.commands.RamseteSimple;
+import frc.robot.commands.SequenceLancer;
 import frc.robot.commands.TourelleAuto;
 import frc.robot.commands.TourelleManuelle;
 import frc.robot.subsystems.BasePilotable;
@@ -37,7 +37,6 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Tourelle;
 import frc.robot.subsystems.Transmission;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -58,7 +57,6 @@ public class RobotContainer {
   public RobotContainer() {
     configureButtonBindings();
    
-   //TODO les coefficient pour conduire devrait être dans la méthode du sous système
     basePilotable.setDefaultCommand(new RunCommand(()-> basePilotable.conduire(pilote.getY(GenericHID.Hand.kLeft), pilote.getX(GenericHID.Hand.kRight)),basePilotable));
     tourelle.setDefaultCommand(new TourelleManuelle(()->(pilote.getTriggerAxis(Hand.kRight)-pilote.getTriggerAxis(Hand.kLeft))*-0.25, tourelle));//moins parce que maths
     transmission.setDefaultCommand(new ChangementVitesse(basePilotable, transmission));
@@ -78,10 +76,10 @@ public class RobotContainer {
    new JoystickButton(pilote, Button.kBumperRight.value).whileHeld(new Gober(gobeur));
 
    //TODO : À ôter lorsque les 2 séquences vont être ok
-   new JoystickButton(pilote, Button.kY.value).toggleWhenPressed(new Lancer(lanceur,limelight)); 
+   new JoystickButton(pilote, Button.kY.value).toggleWhenPressed(new LancerAvecCible(lanceur,limelight)); 
 
    // TODO Remplacer par séquenceLancer (pas viser). Changer le bouton. Changer en toggle ??
-   new JoystickButton(pilote, Button.kBumperLeft.value).whileHeld(new RunCommand(()->lanceur.setVitesse(11), lanceur).andThen(new InstantCommand(lanceur::stop)));
+   new JoystickButton(pilote, Button.kX.value).toggleWhenPressed(new SequenceLancer(lanceur, convoyeur));
   
    //TODO : Vérifier le fonctionnement 
   // new JoystickButton(pilote, Button.kA.value).whenPressed(new SequenceViserLancer(tourelle, lanceur, limelight, convoyeur));
@@ -91,7 +89,7 @@ public class RobotContainer {
 
    
    //TODO : Oter quand séquenceLancer (pas viser) va être ok
-   new JoystickButton(pilote, Button.kB.value).whileHeld(new FournirBalle(convoyeur, tourelle, lanceur));
+   new JoystickButton(pilote, Button.kB.value).whileHeld(new FournirBalleSimple(convoyeur));
 
   
   }

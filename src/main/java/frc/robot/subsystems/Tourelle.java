@@ -70,5 +70,8 @@ public class Tourelle extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("AngleTourelle", getPosition());
     SmartDashboard.putNumber("VitesseTourelle", getVitesse());
+    SmartDashboard.putBoolean("Centrée?", estCentre());
+    
+
   }
 }

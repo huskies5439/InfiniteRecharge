@@ -18,19 +18,12 @@ import frc.robot.subsystems.Tourelle;
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 public class SequenceViserLancer extends ParallelCommandGroup {
   
-
-  /**
-   * Creates a new SequenceViserLancer.
-   */
   public SequenceViserLancer(Tourelle tourelle, Lanceur lanceur,Limelight limelight,Convoyeur convoyeur) {
     addCommands(
       new TourelleAuto(tourelle, limelight),
-      new Lancer(lanceur, limelight),
-      new FournirBalle(convoyeur, tourelle, lanceur)
+      new LancerAvecCible(lanceur, limelight),
+      new FournirBalleAvecCondition(convoyeur, tourelle, lanceur)
     );
 
-
-    // Add your commands in the super() call, e.g.
-    // super(new FooCommand(), new BarCommand());super();
   }
 }
