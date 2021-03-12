@@ -32,7 +32,7 @@ public class LancerAvecCible extends CommandBase {
   @Override
   public void execute() {
    ta =limelight.getTa();
-   vCible = ta*100; //a calibrer
+   vCible = ta*2000; //a calibrer
 
    lanceur.pidfController(vCible);
     

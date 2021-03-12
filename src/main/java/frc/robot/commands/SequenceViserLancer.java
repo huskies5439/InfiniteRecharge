@@ -21,8 +21,8 @@ public class SequenceViserLancer extends ParallelCommandGroup {
   public SequenceViserLancer(Tourelle tourelle, Lanceur lanceur,Limelight limelight,Convoyeur convoyeur) {
     addCommands(
       new TourelleAuto(tourelle, limelight),
-      new LancerAvecCible(lanceur, limelight),
-      new FournirBalleAvecCondition(convoyeur, tourelle, lanceur)
+      new LancerAvecCible(lanceur, limelight)
+      //,new FournirBalleAvecCondition(convoyeur, tourelle, lanceur)
     );
 
   }

@@ -66,7 +66,7 @@ public class Convoyeur extends SubsystemBase {
   }
 
   boolean sortie(){
-    return getUltrasonicRange()>75;
+    return getUltrasonicRange()>150;
   }
 
   public double getUltrasonicRange()

@@ -67,13 +67,12 @@ public class BasePilotable extends SubsystemBase {
 
   @Override
   public void periodic() {
-    //TODO Clean up du dashboard : j'oterais NeoEncodeur, Position Gauche et droite, Vitesse gauche et droite
+    
     odometrie.update(Rotation2d.fromDegrees(getAngle()), getPositionG(), getPositionD());
     SmartDashboard.putNumberArray("odometrie", getOdometry());
     SmartDashboard.putNumber("Vitesse Moyenne", getVitesse());
     SmartDashboard.putNumber("Position Moyenne", getPositionMoyenne());
     SmartDashboard.putNumber("Gyro", getAngle());
-    SmartDashboard.putNumber("vitesse",getVitesse());
 
     //Changement de du ramp sur les NEO entre le mode autonome et téléop
     if (!changementRampe && RobotState.isOperatorControl()){

@@ -13,7 +13,7 @@ public class LancerSimple extends CommandBase {
   /** Creates a new LancerSimple. */
   public LancerSimple(Lanceur lanceur) {
     this.lanceur=lanceur;
-    addRequirements( lanceur);
+    addRequirements(lanceur);
   }
 
   // Called when the command is initially scheduled.

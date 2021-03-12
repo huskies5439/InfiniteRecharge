@@ -40,7 +40,7 @@ public class TourelleAuto extends CommandBase {
 
     if (limelight.getTv()) {
       vitesse = tourelle.pidController(limelight.getTx());
-      SmartDashboard.putString("Avertissement Cible", "YA UNE CIBLE !!!");
+      SmartDashboard.putString("Avertissement Cible", "YA UNE CIBLE !!!:)))))");
         if (tourelle.getSoftLimit(vitesse)) {
           tourelle.setVoltage(vitesse);
         }
@@ -49,7 +49,7 @@ public class TourelleAuto extends CommandBase {
         }
     }
     else {
-      SmartDashboard.putString("Avertissement Cible", "PAS DE CIBLE !!!");
+      SmartDashboard.putString("Avertissement Cible", "PAS DE CIBLE !!! :(((((");
       tourelle.stop();
     }
   }

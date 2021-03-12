@@ -24,12 +24,12 @@ public class Lanceur extends SubsystemBase {
   private final CANSparkMax moteurLanceurGauche = new CANSparkMax(38,MotorType.kBrushless);
   private final SpeedControllerGroup moteurLanceur  = new SpeedControllerGroup(moteurLanceurDroit,moteurLanceurGauche);
   private final SimpleMotorFeedforward lanceurFF = new SimpleMotorFeedforward(0.188,0.001412);
- private PIDController pid = new PIDController(0.003, 0, 0);//.914/60/10
+ private PIDController pid = new PIDController(0.003, 0, 0);
  
   public Lanceur() {
     moteurLanceurDroit.setInverted(true);
     moteurLanceurGauche.setInverted(false);
-    pid.setTolerance(100);
+    pid.setTolerance(250);
     setConversionFactors(1.5);
     moteurLanceurGauche.setIdleMode(IdleMode.kCoast);
     moteurLanceurDroit.setIdleMode(IdleMode.kCoast);
@@ -40,8 +40,8 @@ public class Lanceur extends SubsystemBase {
   public void periodic() {
    SmartDashboard.putNumber("vitesse lanceur", getVitesse());
    SmartDashboard.putBoolean("Bonne vitesse", estBonneVitesse());
-   //SmartDashboard.putNumber("Position lanceur", getPosition());
   }
+  
   public void setConversionFactors(double facteur){
     moteurLanceurDroit.getEncoder().setPositionConversionFactor(facteur);
     moteurLanceurGauche.getEncoder().setPositionConversionFactor(facteur);
@@ -53,8 +53,6 @@ public class Lanceur extends SubsystemBase {
     return pid.atSetpoint();
   }
 
-
-  
   public void setVitesse(double voltage) {
     moteurLanceur.setVoltage(voltage);
   

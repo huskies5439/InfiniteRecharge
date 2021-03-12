@@ -22,12 +22,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import frc.robot.commands.ChangementVitesse;
-import frc.robot.commands.FournirBalleSimple;
 import frc.robot.commands.Gober;
-import frc.robot.commands.LancerAvecCible;
 import frc.robot.commands.RamseteSimple;
 import frc.robot.commands.SequenceLancer;
-import frc.robot.commands.TourelleAuto;
+import frc.robot.commands.SequenceViserLancer;
 import frc.robot.commands.TourelleManuelle;
 import frc.robot.subsystems.BasePilotable;
 import frc.robot.subsystems.Convoyeur;
@@ -62,7 +60,6 @@ public class RobotContainer {
     transmission.setDefaultCommand(new ChangementVitesse(basePilotable, transmission));
     convoyeur.setDefaultCommand(new RunCommand(convoyeur::indexer, convoyeur));
     
-    
     chooser.setDefaultOption("Test", "Test");
     chooser.addOption("BarrelRacing", "BarrelRacing");
     chooser.addOption("Slalom", "Slalom");
@@ -75,23 +72,10 @@ public class RobotContainer {
 
    new JoystickButton(pilote, Button.kBumperRight.value).whileHeld(new Gober(gobeur));
 
-   //TODO : À ôter lorsque les 2 séquences vont être ok
-   new JoystickButton(pilote, Button.kY.value).toggleWhenPressed(new LancerAvecCible(lanceur,limelight)); 
-
-   // TODO Remplacer par séquenceLancer (pas viser). Changer le bouton. Changer en toggle ??
    new JoystickButton(pilote, Button.kX.value).toggleWhenPressed(new SequenceLancer(lanceur, convoyeur));
   
-   //TODO : Vérifier le fonctionnement 
-  // new JoystickButton(pilote, Button.kA.value).whenPressed(new SequenceViserLancer(tourelle, lanceur, limelight, convoyeur));
+   new JoystickButton(pilote, Button.kA.value).toggleWhenPressed(new SequenceViserLancer(tourelle, lanceur, limelight, convoyeur));
    
-  //TODO : Oter quand séquenceviser lancer va être ok
-  new JoystickButton(pilote, Button.kA.value).whileHeld(new TourelleAuto(tourelle,limelight));
-
-   
-   //TODO : Oter quand séquenceLancer (pas viser) va être ok
-   new JoystickButton(pilote, Button.kB.value).whileHeld(new FournirBalleSimple(convoyeur));
-
-  
   }
  
   public Command getAutonomousCommand() {

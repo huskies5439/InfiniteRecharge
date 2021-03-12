@@ -10,7 +10,6 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-
 import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
@@ -27,7 +26,7 @@ public class Tourelle extends SubsystemBase {
   public Tourelle() {
     neotourelle.getEncoder().setPositionConversionFactor(3.6);//1 tour tourelle/5 tour planetary,20 tour neo pour 1 tour planetary,360 par tpour tourelle
     neotourelle.getEncoder().setVelocityConversionFactor(0.06);//ratio position/60 secs
-    pid.setTolerance(1);
+    pid.setTolerance(0.8);
     resetEncoder();
     neotourelle.setInverted(true);
   }
