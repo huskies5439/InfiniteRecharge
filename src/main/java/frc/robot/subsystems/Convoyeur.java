@@ -59,6 +59,7 @@ public class Convoyeur extends SubsystemBase {
 
   public int couleur(){
     return colorsensor.getGreen();
+   // return colorsensor.getProximity();
   }
 
   boolean entree(){

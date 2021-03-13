@@ -35,6 +35,7 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Tourelle;
 import frc.robot.subsystems.Transmission;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -58,12 +59,13 @@ public class RobotContainer {
     basePilotable.setDefaultCommand(new RunCommand(()-> basePilotable.conduire(pilote.getY(GenericHID.Hand.kLeft), pilote.getX(GenericHID.Hand.kRight)),basePilotable));
     tourelle.setDefaultCommand(new TourelleManuelle(()->(pilote.getTriggerAxis(Hand.kRight)-pilote.getTriggerAxis(Hand.kLeft))*-0.25, tourelle));//moins parce que maths
     transmission.setDefaultCommand(new ChangementVitesse(basePilotable, transmission));
-    convoyeur.setDefaultCommand(new RunCommand(convoyeur::indexer, convoyeur));
+    //convoyeur.setDefaultCommand(new RunCommand(convoyeur::indexer, convoyeur));
     
     chooser.setDefaultOption("Test", "Test");
     chooser.addOption("BarrelRacing", "BarrelRacing");
     chooser.addOption("Slalom", "Slalom");
     chooser.addOption("Bounce", "Bounce");
+    chooser.addOption("Galactic Search", "GalacticSearch");
     SmartDashboard.putData("Auto Mode", chooser);
 
   }                               
@@ -98,7 +100,13 @@ public class RobotContainer {
         }
 
       basePilotable.resetOdometrie(autonomousTrajectory.getInitialPose());
-      return new RamseteSimple(autonomousTrajectory, basePilotable);
+      if (trajet == "GalacticSearch"){
+         return new ParallelCommandGroup(new Gober(gobeur), new RamseteSimple(autonomousTrajectory, basePilotable));
+      }
+      else { 
+         return new RamseteSimple(autonomousTrajectory, basePilotable);
+      }
+     
      
    }
 }
