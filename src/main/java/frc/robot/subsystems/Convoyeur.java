@@ -39,7 +39,7 @@ public class Convoyeur extends SubsystemBase {
   }
 
   public void fournirBalle() {
-    convoyeur.set(0.75);
+    convoyeur.set(0.85);
   }
   public void sortirBalle(){
     convoyeur.set(-0.75);

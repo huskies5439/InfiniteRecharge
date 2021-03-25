@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import frc.robot.commands.ChangementVitesse;
+import frc.robot.commands.FournirBalleSimple;
 import frc.robot.commands.Gober;
 import frc.robot.commands.RamseteSimple;
 import frc.robot.commands.SequenceLancer;
@@ -59,13 +60,13 @@ public class RobotContainer {
     basePilotable.setDefaultCommand(new RunCommand(()-> basePilotable.conduire(pilote.getY(GenericHID.Hand.kLeft), pilote.getX(GenericHID.Hand.kRight)),basePilotable));
     tourelle.setDefaultCommand(new TourelleManuelle(()->(pilote.getTriggerAxis(Hand.kRight)-pilote.getTriggerAxis(Hand.kLeft))*-0.25, tourelle));//moins parce que maths
     transmission.setDefaultCommand(new ChangementVitesse(basePilotable, transmission));
-    //convoyeur.setDefaultCommand(new RunCommand(convoyeur::indexer, convoyeur));
+    convoyeur.setDefaultCommand(new RunCommand(convoyeur::indexer, convoyeur));
     
     chooser.setDefaultOption("Test", "Test");
     chooser.addOption("BarrelRacing", "BarrelRacing");
     chooser.addOption("Slalom", "Slalom");
-    chooser.addOption("Bounce", "Bounce");
-    chooser.addOption("Galactic Search", "GalacticSearch");
+    chooser.addOption("Bounce", "Bounce");//bumper centré sur B2
+    chooser.addOption("Galactic Search", "GalacticSearch");//bumper avant centré sur C2
     SmartDashboard.putData("Auto Mode", chooser);
 
   }                               
@@ -78,6 +79,7 @@ public class RobotContainer {
   
    new JoystickButton(pilote, Button.kA.value).toggleWhenPressed(new SequenceViserLancer(tourelle, lanceur, limelight, convoyeur));
    
+  // new JoystickButton(pilote, Button.kB.value).toggleWhenPressed(new FournirBalleSimple(convoyeur));
   }
  
   public Command getAutonomousCommand() {
