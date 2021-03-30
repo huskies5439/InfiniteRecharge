@@ -8,6 +8,8 @@
 package frc.robot.subsystems;
 
 
+import javax.lang.model.util.ElementScanner6;
+
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -28,9 +30,10 @@ public class Limelight extends SubsystemBase {
    * Creates a new Limelight.
    */
   public Limelight() {
-    ledOff();
-    camHumain();
-
+    //ledOff();
+    //camHumain();
+    ledOn();
+    camDetection();
   }
 
   public double getTa() {
@@ -61,10 +64,17 @@ public class Limelight extends SubsystemBase {
   public void camDetection(){
     camMode.setNumber(0);
   }
+ 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Ta", getTa());
     SmartDashboard.putNumber("tx", getTx());
+    SmartDashboard.putNumber("ty", getTy());
+
+    
+      
+
   }
+
 }

@@ -9,14 +9,16 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Lanceur extends SubsystemBase {
 
@@ -25,6 +27,13 @@ public class Lanceur extends SubsystemBase {
   private final SpeedControllerGroup moteurLanceur  = new SpeedControllerGroup(moteurLanceurDroit,moteurLanceurGauche);
   private final SimpleMotorFeedforward lanceurFF = new SimpleMotorFeedforward(0.188,0.001412);
  private PIDController pid = new PIDController(0.003, 0, 0);
+
+
+
+ private ShuffleboardTab calibration = Shuffleboard.getTab("calibration");
+ private NetworkTableEntry vitesseLanceurCible =
+       calibration.add("vitesse lanceur cible",1)
+             .getEntry();
  
   public Lanceur() {
     moteurLanceurDroit.setInverted(true);
@@ -68,5 +77,10 @@ public class Lanceur extends SubsystemBase {
   }
   public void pidfController(double vcible){
     setVitesse(pid.calculate(getVitesse(),vcible)+lanceurFF.calculate(vcible));
+  }
+
+  public double vShuffleBoard(){
+    return vitesseLanceurCible.getDouble(0);
+
   }
 }

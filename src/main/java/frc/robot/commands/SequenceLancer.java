@@ -19,7 +19,7 @@ public class SequenceLancer extends ParallelCommandGroup {
     addCommands(
       new LancerSimple(lanceur),
       
-      new SequentialCommandGroup(new WaitCommand(0.75), new FournirBalleSimple(convoyeur))
+      new SequentialCommandGroup(new WaitCommand(1.25), new FournirBalleSimple(convoyeur))
 
     );
   }

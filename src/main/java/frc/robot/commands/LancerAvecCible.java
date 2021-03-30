@@ -12,9 +12,12 @@ import frc.robot.subsystems.Lanceur;
 import frc.robot.subsystems.Limelight;
 
 public class LancerAvecCible extends CommandBase {
+ 
+  
   Lanceur lanceur;
   Limelight limelight;
   double ta;
+  double ty;
   double vCible;
 
   public LancerAvecCible( Lanceur lanceur, Limelight limelight ) {
@@ -25,23 +28,32 @@ public class LancerAvecCible extends CommandBase {
  
   @Override
   public void initialize() {
+    limelight.camDetection();
+    limelight.ledOn();
 
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-   ta =limelight.getTa();
-   vCible = 5360; //a calibrer
 
-   lanceur.pidfController(vCible);
-    
+   if (limelight.getTv()) {
+      ta =limelight.getTa();
+      vCible = lanceur.vShuffleBoard();//a calibrer
+      lanceur.pidfController(vCible);
+     
+  }
+  else {
+    lanceur.stop();
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     lanceur.stop();
+    //limelight.camHumain();
+    //limelight.ledOff();
   }
 
   // Returns true when the command should end.

@@ -57,8 +57,8 @@ public class TourelleAuto extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    limelight.camHumain();
-    limelight.ledOff();
+    //limelight.camHumain();
+    //limelight.ledOff();
     tourelle.stop();
   }
 
