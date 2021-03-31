@@ -34,7 +34,6 @@ public class Lanceur extends SubsystemBase {
  private NetworkTableEntry vitesseLanceurCible =
        calibration.add("vitesse lanceur cible",1)
              .getEntry();
- 
   public Lanceur() {
     moteurLanceurDroit.setInverted(true);
     moteurLanceurGauche.setInverted(false);

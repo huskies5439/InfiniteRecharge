@@ -26,6 +26,12 @@ public class Limelight extends SubsystemBase {
   private NetworkTableEntry ledMode = limelight.getEntry("ledMode");
   private NetworkTableEntry camMode = limelight.getEntry("camMode");
 
+
+
+  //Estimateur de distance, voir documentation Limelight
+  double hLimelight = 20.5; //pouce
+  double hCible = 89.5; //pouce
+  double angleLimelight=22.0;//degres
   /**
    * Creates a new Limelight.
    */
@@ -34,6 +40,9 @@ public class Limelight extends SubsystemBase {
     //camHumain();
     ledOn();
     camDetection();
+  }
+  public double getDistance(){
+    return(hCible-hLimelight)/(Math.tan(Math.toRadians(angleLimelight+getTy())));//donne la distance en pouces
   }
 
   public double getTa() {
@@ -71,6 +80,7 @@ public class Limelight extends SubsystemBase {
     SmartDashboard.putNumber("Ta", getTa());
     SmartDashboard.putNumber("tx", getTx());
     SmartDashboard.putNumber("ty", getTy());
+    SmartDashboard.putNumber("distance limelight", getDistance());
 
     
       
