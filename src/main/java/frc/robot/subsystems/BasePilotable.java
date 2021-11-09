@@ -76,7 +76,7 @@ public class BasePilotable extends SubsystemBase {
 
     //Changement de du ramp sur les NEO entre le mode autonome et téléop
     if (!changementRampe && RobotState.isOperatorControl()){
-      setRamp(1);
+      setRamp(0.1);
       changementRampe = true;
     }
 

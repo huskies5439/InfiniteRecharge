@@ -54,7 +54,7 @@ public class ChangementVitesse extends CommandBase {
       transmission.hauteVitesse(); 
       state =State.HIGH; //Vérifier que le Robot est en basseVitesse pour passer en hauteVitesse.
       } 
-    else if (Math.abs(basePilotable.getVitesse()) < 1.4 && state == State.HIGH) {
+    else if (Math.abs(basePilotable.getVitesse()) < 1.2 && state == State.HIGH) {
       transmission.basseVitesse(); 
       state = State.LOW; //Vérifier que le Robot est en hauteVitesse pour passer en basseVitesse.
       } 

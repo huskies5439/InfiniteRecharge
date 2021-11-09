@@ -7,6 +7,7 @@
 
 package frc.robot.commands;
 
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Lanceur;
 import frc.robot.subsystems.Limelight;
@@ -16,7 +17,7 @@ public class LancerAvecCible extends CommandBase {
   
   Lanceur lanceur;
   Limelight limelight;
-  double ta;
+  double distance;
   double ty;
   double vCible;
 
@@ -38,10 +39,21 @@ public class LancerAvecCible extends CommandBase {
   public void execute() {
 
    if (limelight.getTv()) {
-      ta =limelight.getTa();
-      vCible = lanceur.vShuffleBoard();//a calibrer
+     distance= limelight.getDistance();
+
+    if (distance > 150){
+      vCible= 11.3*distance+2490;
+    }
+
+    else if (distance >= 120 && distance <=150){
+      vCible= 4150;
+    }
+
+    else{
+      vCible= -7.5*distance+5050;
+    }
+
       lanceur.pidfController(vCible);
-     
   }
   else {
     lanceur.stop();
@@ -52,8 +64,8 @@ public class LancerAvecCible extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     lanceur.stop();
-    //limelight.camHumain();
-    //limelight.ledOff();
+    limelight.camHumain();
+    limelight.ledOff();
   }
 
   // Returns true when the command should end.

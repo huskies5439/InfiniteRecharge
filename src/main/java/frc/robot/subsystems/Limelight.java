@@ -36,10 +36,8 @@ public class Limelight extends SubsystemBase {
    * Creates a new Limelight.
    */
   public Limelight() {
-    //ledOff();
-    //camHumain();
-    ledOn();
-    camDetection();
+    ledOff();
+    camHumain();
   }
   public double getDistance(){
     return(hCible-hLimelight)/(Math.tan(Math.toRadians(angleLimelight+getTy())));//donne la distance en pouces
