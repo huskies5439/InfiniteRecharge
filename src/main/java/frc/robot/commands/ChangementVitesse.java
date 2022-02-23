@@ -50,11 +50,11 @@ public class ChangementVitesse extends CommandBase {
     if (RobotState.isAutonomous()){
        state= State.AUTO; //Pas nécéssaire en compé, mais sert a retourner en Autonomous.
       } 
-    else if (Math.abs(basePilotable.getVitesse()) > 2 && state == State.LOW) { 
+    else if (Math.abs(basePilotable.getVitesse()) > 0.85 && state == State.LOW) { 
       transmission.hauteVitesse(); 
       state =State.HIGH; //Vérifier que le Robot est en basseVitesse pour passer en hauteVitesse.
       } 
-    else if (Math.abs(basePilotable.getVitesse()) < 1.2 && state == State.HIGH) {
+    else if (Math.abs(basePilotable.getVitesse()) < 0.6 && state == State.HIGH) {
       transmission.basseVitesse(); 
       state = State.LOW; //Vérifier que le Robot est en hauteVitesse pour passer en basseVitesse.
       } 
